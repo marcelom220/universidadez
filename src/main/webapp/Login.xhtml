@@ -1,0 +1,39 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/Layout.xhtml">
+	
+	
+	
+	<ui:define name="content">
+		
+		
+		<h:form id="frm">
+		
+			<p:messages autoUpdate="true" />
+			
+				<h:panelGrid columns="2" styleClass="grid-login">
+				<f:facet name="header">
+     <h:graphicImage library="algaworks" name="images/logo2.png" style="max-width: 100%;
+    height: auto; " />
+    </f:facet>
+					<p:outputLabel value="Usuário" for="txtUsuario" style="text-align:middle;"/>
+					<p:inputText id="txtUsuario" size="20"
+						value="#{loginBean.usuarioLogin.matricula}" />
+						
+					<p:outputLabel value="Senha" for="txtSenha" />
+					<p:password id="txtSenha" size="20"
+						value="#{loginBean.usuarioLogin.password}" />
+						
+					<p:outputLabel />
+					<p:commandButton id="btnLogar" icon="ui-icon-circle-check"
+						value="Acessar" action="#{loginBean.login}" update="@form" />
+				</h:panelGrid>
+			
+		</h:form>
+		
+	</ui:define>
+	
+</ui:composition>

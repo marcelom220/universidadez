@@ -1,0 +1,83 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/LayoutAluno.xhtml">
+	
+	<ui:define name="titulo">Lista de usuarios</ui:define>
+    
+    <ui:define name="corpo">
+    	<f:metadata>
+			<f:viewAction action="#{usuarioBean.usuarios}" />
+		</f:metadata>
+    	<h1>Lista de usuários</h1>
+    	
+    	<h:form id="frmPesquisa">
+    		<p:messages id="messages" autoUpdate="true" closable="true" />
+    		
+    		<p:toolbar style="margin-top: 20px">
+    			<p:toolbarGroup>
+    				<p:button value="Novo" outcome="/usuario/UsuarioCadastro.xhtml"/>
+    			</p:toolbarGroup>
+    		</p:toolbar>
+    	
+	    	<p:dataTable id="usuariosTable" value="#{usuarioBean.listaAtivos}" var="usuario"
+		    		style="margin-top: 20px" emptyMessage="Nenhum usuario encontrado." rows="5"
+		    		paginator="true" paginatorAlwaysVisible="false" paginatorPosition="bottom"
+		    		lazy="true" rowsPerPageTemplate="5,10,15">
+		    		
+		    		<p:column headerText="Código" style="text-align: center; width: 100px">
+		    			<h:outputText value="#{usuario.id}" />
+		    		</p:column>
+		    		<p:column headerText="Nome">
+		    			<h:outputText value="#{usuario.nome}" />
+		    		</p:column>
+		    		<p:column headerText="tipo">
+		    			<h:outputText value="#{usuario.tipoUsuario}" />
+		    		</p:column>
+		    		<p:column headerText="senha">
+		    			<h:outputText value="#{usuario.senha}" />
+		    		</p:column>
+				<p:column headerText="matricula">
+					<h:outputText value="#{usuario.matricula}" />
+				</p:column>
+				<p:column headerText="e-mail">
+					<h:outputText value="#{usuario.email}" />
+				</p:column>
+				<p:column headerText="ativo">
+					<h:outputText value="#{usuario.ativo}" />
+				</p:column>
+				<p:column headerText="telefone">
+					<h:outputText value="#{usuario.telefone}" />
+				</p:column>
+				<p:column headerText="sexo">
+					<h:outputText value="#{usuario.sexo}" />
+				</p:column>
+	    		<p:column style="width: 100px; text-align: center">
+	    			<p:button outcome="UsuarioCadastro" icon="ui-icon-pencil" title="Editar">
+	    				<f:param name="usuario" value="#{usuario.id}"/>
+	    			</p:button>
+	    			<p:commandButton icon="ui-icon-trash" title="Desativar" oncomplete="PF('confirmacaoDesativar').show()"
+							process="@this" update=":frmPesquisa:confirmacaoExclusaoDialog">
+						<f:setPropertyActionListener target="#{usuarioBean.desativar}" value="#{carro}" />
+					</p:commandButton>
+	    		</p:column>
+		    </p:dataTable>
+		   
+		    <p:confirmDialog id="confirmacaoDesativarDialog" widgetVar="confirmacaoDesativar"
+	        		message="Tem certeza que deseja desativar o usuario de matricula #{usuarioBean.usuario.matricula}?"  
+	                header="Desativação de usuario" severity="alert">
+	        	<p:button value="Não" onclick="PF('confirmacaoExclusao').hide(); return false;" />
+	        	<p:commandButton value="Sim" update=":frmPesquisa:usuariosTable" process="@this"
+	        			oncomplete="PF('confirmacaoExclusao').hide()" action="#{usuarioBean.desativar}"/>
+	    	</p:confirmDialog>
+	    	
+	    	
+			
+			
+	    	
+	    </h:form>
+    </ui:define>
+	
+</ui:composition>

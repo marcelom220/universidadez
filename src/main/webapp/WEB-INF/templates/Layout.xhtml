@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<f:facet name="first">
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+	</f:facet>
+
+	<title>Universidade Z</title>
+
+	<h:outputStylesheet library="algaworks" name="styles/customLogin.css" />
+	<h:outputStylesheet library="algaworks" name="styles/layoutLogin.css" />
+	<h:outputStylesheet library="algaworks" name="styles/componentsLogin.css" />
+	
+	
+	 
+	
+	<h:outputScript target="body" library="primefaces" name="jquery/jquery.js" />
+	<h:outputScript target="body" library="algaworks" name="javascripts/app.js" />
+</h:head>
+
+<h:body>
+
+	<header class="aw-topbar"   >
+	
+		
+		<p:outputLabel>Sistema de Comunicação Acadêmica</p:outputLabel>
+		
+		<a href="#" class="aw-toggle  js-toggle"><i class="fa  fa-bars"></i></a>
+	</header>
+	
+	
+	
+	<section class="aw-content  js-content">
+		<ui:insert name="content" />
+	</section>
+	
+</h:body>
+
+</html>
