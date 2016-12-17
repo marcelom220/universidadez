@@ -12,17 +12,18 @@
 .aw-menu {
 	font-size: 1.1em;
 	vertical-align: middle;
+	font: serif;
 }
 
 .grid-login{
 	
-	
+	font-family:sans-serif;
 	  width: 25%;
     float: left;
     padding: 15px;
-    border: 1px solid #d2d2d2;
-    border-radius: 30px;
-    background-color: #e6e6e6;
+    border: 10px solid rgb(33, 145, 192);
+    border-radius: 50px;
+    background-color: #22b4bf33145192;
 	
 }#frm{
 width: 360px;
@@ -47,7 +48,7 @@ margin-top: 150px;}
 	vertical-align:middle;
 	text-decoration: none;
 	font-weight: 500;
-	color: #373737;
+	color: rgb(33, 145, 192);
 } 
 
 .aw-menu > ul i {
@@ -55,7 +56,7 @@ margin-top: 150px;}
 }
 
 .aw-menu > ul a:hover, .aw-menu > ul a:focus {
-	background-color: #dfdfdf;
+	background-color: rgb(33, 145, 192);
 }
 
 .aw-menu > ul .is-selected {
@@ -76,5 +77,5 @@ margin-top: 150px;}
 	text-align: center;
 
 	font-size: 1.5em;
-	color: #373737;
+	color: rgb(33, 145, 192);
 }

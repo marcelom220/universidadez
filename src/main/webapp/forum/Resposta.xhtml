@@ -1,0 +1,55 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/LayoutAluno.xhtml"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">>
+
+
+
+	
+	<ui:define name="content">
+		<h1 class="aw-page-title">Lista de Perguntas</h1>
+
+		<f:metadata>
+			<f:viewAction action="#{respostaBean.listaAtivas}" />
+			<f:viewAction action="#{indexBean.setForum()}" />
+		</f:metadata>
+
+		<div>
+			<h1>#{topicoBean.topico.titulo}</h1>
+			#{topicoBean.topico.descricao}
+		</div>
+		<br />
+		<br />
+		<h:form id="frmListaTopicos">
+
+		
+
+			<p:dataGrid var="topicoDaLista" value="#{respostaBean.respostas}" columns="1" emptyMessage="Sem perguntas cadastradas">
+
+				<p:panel id="basic" header=" Autor: #{topicoDaLista.usuario.nome} | Postado em #{topicoDaLista.dataCadastro}"
+					style="margin-bottom:20px">
+
+					<h:outputText value="#{topicoDaLista.descricao}" />
+					<br />
+					<br />
+					
+					<p:button id="oi" value="Envia" outcome="/forum/RespostasListaAtivosPorTopicos.xhtml"  ><f:param name="topico" value="#{topicoDaLista.id}" /></p:button>
+					
+
+				</p:panel>
+			</p:dataGrid>
+		</h:form>
+		
+
+
+
+
+
+
+	</ui:define>
+
+</ui:composition>

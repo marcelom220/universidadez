@@ -2,23 +2,32 @@
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:o="http://omnifaces.org/ui"
 	template="/WEB-INF/templates/LayoutAluno.xhtml">
 	
-	<ui:define name="titulo">Novo usuario</ui:define>
-
-
+	<ui:define name="titulo"> #{usuarioBean.usuario.id != null ? 'Edição de usuario' : 'Novo usuário' }</ui:define>
+	<f:metadata>
+		<o:viewParam name="usuario" value="#{usuarioBean.usuario}"/>
+		<f:viewAction action="#{cursoBean.lista}" />
+	</f:metadata>
+<f:metadata>
+  <f:viewAction action="#{indexBean.setUsuario()}" />
+</f:metadata>
 
 	<ui:define name="content">
 
 
-		<h1 class="aw-page-title">Novo usuário</h1>
+		<h1 class="aw-page-title">#{usuarioBean.usuario.id != null ? 'Edição de usuario' : 'Novo usuário' }</h1>
 		<h:form id="cadastrarUsuario">
+		<c:if test="#{usuarioLogado.tipoUsuario == 'ADMINISTRADOR'}">
 			<p:messages></p:messages>
 			
 			<div class="ui-fluid" >
-					<h:panelGrid columns="4" id="painel" layout="grid"
+
+				
+				<h:panelGrid columns="4" id="painel" layout="grid"
 						style="margin-top: 20px" styleClass="panelgrid-noborder"
 						columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4">
 
@@ -27,16 +36,25 @@
 						<p:inputText value="#{usuarioBean.usuario.nome}" size="60" />
 
 
-						<h:outputLabel value="Sexo" />
-						<h:selectOneRadio value="#{usuarioBean.usuario.sexo}">
+						<h:outputLabel value="Sexo" for="sex" />
+						<h:selectOneRadio id="sex" value="#{usuarioBean.usuario.sexo}">
 							<f:selectItem itemValue="m" itemLabel="Masculino"></f:selectItem>
 							<f:selectItem itemValue="f" itemLabel="Feminino"></f:selectItem>
 						</h:selectOneRadio>
-
+						
+						
+						<p:outputLabel id="cur" value="Curso" for="curso" />
+						<h:selectOneMenu id="curso"
+							value="#{usuarioBean.usuario.curso}" required="true"
+							requiredMessage="Por favor selecione um curso">
+							<f:selectItem itemLabel="Selecione" />
+							<f:selectItems value="#{cursoBean.cursos}" var="curs"
+								itemLabel="#{curs.nome}" itemValue="#{curs}" />
+						</h:selectOneMenu>
 
 
 						<p:outputLabel value="Matricula:" for="matricula-user" />
-						<p:inputMask mask="99999.9999" size="25"
+						<p:inputMask mask="999999999" size="25"
 							value="#{usuarioBean.usuario.matricula}" id="matricula-user" />
 
 
@@ -71,26 +89,38 @@
 
 
 
-						<p:outputLabel value="Tipo de usuário" />
-						<p:selectOneButton id="tipoUsuario" required="true"
-							requiredMessage="Informe o tipo de usuário "
-							value="#{usuarioBean.usuario.tipoUsuario}">
-							<f:selectItems value="#{usuarioBean.tiposUsuario}" />
-						</p:selectOneButton>
+						<p:outputLabel value="Tipo de usuário"  />
+					<p:selectOneMenu id="tipoUsuario"
+						value="#{usuarioBean.usuario.tipoUsuario}" required="true"
+						requiredMessage="Favor informar o tipo do usuário">
+						<f:selectItems value="#{usuarioBean.tiposUsuario}" />
+					</p:selectOneMenu>
 
-					<p:toolbar>
-					<p:toolbarGroup>
-						<p:commandButton value="Salvar" action="#{usuarioBean.insere}"
-							update="@form" />
-						<p:button value="Fechar" onclick="PF('cadastroUsuario').hide();" />
-					</p:toolbarGroup>
-					</p:toolbar>
+
+
+
+
 				</h:panelGrid>
+				
+				<p:toolbar style="margin-top: 20px">
+					<p:toolbarGroup>
+						<p:button value="Voltar" outcome="/usuario/Usuario.xhtml" />						
+					</p:toolbarGroup>
+					<p:toolbarGroup>
+					<p:commandButton value="Salvar" action="#{usuarioBean.insere}"
+							update="@form" rendered="#{usuarioBean.usuario.id == null}" />
 
+						<p:commandButton value="Salvar" action="#{usuarioBean.alterar}"
+					update="@form" rendered="#{usuarioBean.usuario.id != null}" />
+					</p:toolbarGroup>
+				</p:toolbar>			
+
+
+				
 
 
 				</div>	
-			
+			</c:if>
 		</h:form>
 
 	</ui:define>

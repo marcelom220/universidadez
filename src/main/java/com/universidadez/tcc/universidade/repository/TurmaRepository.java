@@ -65,6 +65,8 @@ public class TurmaRepository implements Serializable {
 		return query.getResultList();
 	}
 
+	
+	
 	/**
 	 * Retorna uma turma do banco de dados, selecionada por id.
 	 * 
@@ -95,6 +97,7 @@ public class TurmaRepository implements Serializable {
 		try {
 
 			et.begin();
+			turma = em.merge(turma);
 			em.remove(turma);
 			et.commit();
 			log.info("excluiu a turma.");
@@ -107,6 +110,8 @@ public class TurmaRepository implements Serializable {
 		}
 		log.info("finalizou o metodo excluir.");
 	}
+
+	
 
 	
 }

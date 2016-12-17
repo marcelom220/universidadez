@@ -29,9 +29,6 @@ public class Curso implements Serializable {
 	private Long id;
 	private String nome;
 	private String nome_coordenador;
-	
-	@ManyToOne
-	@JoinColumn(name="campus_id")
 	private Campus campus;
 	
 	
@@ -58,7 +55,7 @@ public class Curso implements Serializable {
 	
 	@NotEmpty
 	@Size(min = 5, max = 255)
-	@Column(length = 255, nullable = false, unique = true)
+	@Column(length = 255,unique = true )
 	public String getNome() {
 		return nome;
 	}
@@ -68,7 +65,7 @@ public class Curso implements Serializable {
 	
 	@NotEmpty
 	@Size(min = 5, max = 255)
-	@Column(length = 255, nullable = false, unique = true)
+	@Column(length = 255)
 	public String getNome_coordenador() {
 		return nome_coordenador;
 	}
@@ -77,7 +74,8 @@ public class Curso implements Serializable {
 	}
 
 
-
+	@ManyToOne
+	@JoinColumn(name="campus_id")
 	public Campus getCampus() {
 		return campus;
 	}
@@ -85,13 +83,12 @@ public class Curso implements Serializable {
 	public void setCampus(Campus campus) {
 		this.campus = campus;
 	}
-	
-
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((campus == null) ? 0 : campus.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
 		return result;
@@ -106,6 +103,11 @@ public class Curso implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Curso other = (Curso) obj;
+		if (campus == null) {
+			if (other.campus != null)
+				return false;
+		} else if (!campus.equals(other.campus))
+			return false;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -118,6 +120,10 @@ public class Curso implements Serializable {
 			return false;
 		return true;
 	}
+	
+
+
+
 	
 	
 	

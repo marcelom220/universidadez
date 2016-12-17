@@ -1,13 +1,16 @@
 package com.universidadez.tcc.forum.repository;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
 
+import com.universidadez.tcc.forum.model.Sala;
 import com.universidadez.tcc.forum.model.Topico;
+
 
 
 public class TopicoRepository implements Serializable{
@@ -18,6 +21,9 @@ public class TopicoRepository implements Serializable{
 
 	
 	public void insere(Topico topico) {
+		
+		topico.setAtivo(true);
+		topico.setDataCadastro(new Date());
 		EntityTransaction et = em.getTransaction();
 		try {
 			et.begin();
@@ -63,8 +69,9 @@ public class TopicoRepository implements Serializable{
 	}
 
 
-	public List<Topico> lista() {
+	public List<Topico> lista(Sala sala) {
 		TypedQuery<Topico> query = em.createNamedQuery("Topicos.listaAtivos", Topico.class);
+		query.setParameter("sala", sala);
 		return query.getResultList();
 	}
 

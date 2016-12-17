@@ -9,8 +9,12 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 
+import org.apache.log4j.Logger;
+
+import com.universidadez.tcc.forum.model.Sala;
 import com.universidadez.tcc.forum.model.Topico;
 import com.universidadez.tcc.forum.repository.TopicoRepository;
+import com.universidadez.tcc.login.model.Usuario;
 import com.universidadez.tcc.util.JpaUtil;
 
 
@@ -18,11 +22,13 @@ import com.universidadez.tcc.util.JpaUtil;
 @SessionScoped
 public class TopicoBean implements Serializable {
 	private static final long serialVersionUID = 1L;
-
+	private static Logger logger = Logger.getLogger(TopicoBean.class);
 	private Topico topico = new Topico();
 	private List<Topico> topicos;
 	private Topico topicoSelecionado;
-
+	private Sala sala;
+	private Usuario usuario;
+	
 	/**
 	 * 
 	 */
@@ -31,11 +37,14 @@ public class TopicoBean implements Serializable {
 
 	
 	public void inserir() {
+		logger.info("iniciou o método cadastrar.");
 		EntityManager em = JpaUtil.getEntityManager();
 		TopicoRepository tr = new TopicoRepository(em);
 		FacesContext context = FacesContext.getCurrentInstance();
 
 		try {
+			topico.setUsuario(usuario);
+			topico.setSala(sala);
 			tr.insere(topico);
 			FacesMessage mensagem = new FacesMessage("Topico " + topico.getTitulo() + " cadastrado com sucesso.");
 			mensagem.setSeverity(FacesMessage.SEVERITY_INFO);
@@ -51,20 +60,38 @@ public class TopicoBean implements Serializable {
 
 	
 	public void listaAtivas() {
+		logger.info("Entrou no método listaAtivas.");
 		EntityManager em = JpaUtil.getEntityManager();
 		TopicoRepository tr =  new TopicoRepository(em);
-		this.topicos = tr.lista();
+		this.topicos = tr.lista(sala);
 	}
 
 	
 		public void alterar() {
+		logger.info("Entrou no método alterar.");
 		EntityManager em = JpaUtil.getEntityManager();
 		TopicoRepository tr =  new TopicoRepository(em);
-		tr.altera(topicoSelecionado);
+		FacesContext context = FacesContext.getCurrentInstance();
+		
+		
+		try {
+			
+			tr.altera(topicoSelecionado);
+			FacesMessage mensagem = new FacesMessage("Topico " + topico.getTitulo() + " Alterado com sucesso.");
+			mensagem.setSeverity(FacesMessage.SEVERITY_INFO);
+			context.addMessage(null, mensagem);
+			
+
+		} catch (Exception e) {
+			FacesMessage mensagem = new FacesMessage("Problema ao tentar Alterar o tópico.");
+			mensagem.setSeverity(FacesMessage.SEVERITY_ERROR);
+			context.addMessage(null, mensagem);
+		}
 	}
 
 	
 	public void desativa() {
+		logger.info("Entrou no método desativa.");
 		EntityManager em = JpaUtil.getEntityManager();
 		TopicoRepository tr = new TopicoRepository(em);
 		FacesContext context = FacesContext.getCurrentInstance();
@@ -119,12 +146,35 @@ public class TopicoBean implements Serializable {
 		return topicoSelecionado;
 	}
 
+	
+
+
 	/**
 	 * @param topicoSelecionado
 	 *            the topicoSelecionado to set
 	 */
 	public void setTopicoSelecionado(Topico topicoSelecionado) {
 		this.topicoSelecionado = topicoSelecionado;
+	}
+
+
+	public Sala getSala() {
+		return sala;
+	}
+
+
+	public void setSala(Sala sala) {
+		this.sala = sala;
+	}
+
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 
 }

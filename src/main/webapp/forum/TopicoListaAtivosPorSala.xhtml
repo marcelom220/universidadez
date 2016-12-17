@@ -1,0 +1,171 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/LayoutAluno.xhtml"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">>
+
+
+
+
+	<ui:define name="content">
+		<h1 class="aw-page-title">Lista de Perguntas</h1>
+
+		<f:metadata>
+			<f:viewAction action="#{indexBean.setForum()}" />
+			<f:viewAction action="#{topicoBean.listaAtivas}" />
+		</f:metadata>
+
+		<div>
+			<h1>#{topicoBean.topico.titulo}</h1>
+			#{topicoBean.topico.descricao}
+		</div>
+		<br />
+		<br />
+		<h:form id="frmListaTopicos">
+
+			<c:if test="#{usuarioLogado.tipoUsuario == 'ADMINISTRADOR'}">
+				<p:commandButton value="Nova Pergunta"
+					onclick="PF('cadastroTopico').show();" icon="ui-icon-star" />
+			</c:if>
+
+			<p:dataGrid var="topicoDaLista" value="#{topicoBean.topicos}" columns="1" emptyMessage="Sem perguntas cadastradas">
+
+				<p:panel id="basic" header="#{topicoDaLista.titulo} | Autor: #{topicoDaLista.usuario.nome} | Postado em #{topicoDaLista.dataCadastro}"
+					style="margin-bottom:20px">
+
+					<h:outputText value="#{topicoDaLista.descricao}" />
+					<br />
+					<br />
+					
+					<p:commandButton icon="ui-icon-circle-triangle-e"
+						value="Clique aqui para entrar na discussão."
+						action="RespostasListaAtivosPorTopicos?faces-redirect=true" >
+						<f:setPropertyActionListener value="#{topicoDaLista}"
+							target="#{respostaBean.topico}" />
+						<f:setPropertyActionListener value="#{usuarioLogado}"
+							target="#{respostaBean.usuario}" />
+						
+					</p:commandButton>
+					
+					
+					<c:if test="#{usuarioLogado.tipoUsuario == 'ADMINISTRADOR'}">
+						<f:facet name="options">
+							<p:menu>
+								<p:menuitem value="Editar"
+									oncomplete="PF('alteracaoTopico').show();" icon="ui-icon-pencil"
+									process="@this" update="@form">
+									<f:setPropertyActionListener value="#{topicoDaLista}"
+										target="#{topicoBean.topicoSelecionado}" />
+										
+								</p:menuitem>
+
+								<p:menuitem value="Remover"
+									oncomplete="PF('exclusaoTopico').show();" icon="ui-icon-trash"
+									process="@this" update="@form">
+									<f:setPropertyActionListener value="#{topicoDaLista}"
+										target="#{topicoBean.topicoSelecionado}" />
+								</p:menuitem>
+							</p:menu>
+						</f:facet>
+					</c:if>
+
+				</p:panel>
+			</p:dataGrid>
+		</h:form>
+		<p:dialog id="cadastroTopicoDialog" header="Cadastro de Pergunta"
+			widgetVar="cadastroTopico" modal="true" resizable="false"
+			style="min-width: 300px" responsive="true" dynamic="true">
+
+			<div id="formCadastroTopico" class="externoFormulario">
+				<h:form id="frmCadastroTopico">
+					<p:messages autoUpdate="true" />
+					<h:panelGrid columns="2" styleClass="gridFormulario">
+
+						<p:outputLabel for="txtNomeTopico" value="Título da pergunta: " />
+						<p:inputText id="txtNomeTopico" value="#{topicoBean.topico.titulo}" required="true" requiredMessage="Por favor escreva o título da pergunta" />
+
+						<p:outputLabel for="txtDescricaoTopico" value="Descrição do topico: " />
+						<p:inputTextarea id="txtDescricaoTopico"
+							value="#{topicoBean.topico.descricao}" required="true" requiredMessage="Por favor escreva a descrição"/>
+
+						<p:outputLabel for="txtSalaTopico" value="Sala do topico: " />
+						<p:inputText id="txtSalaTopico" value="#{topicoBean.sala.nome}"
+							readonly="true" requiredMessage="Por favor selecione o tópico" required="true"/>
+						
+						<p:outputLabel for="sUsuarioTopico" value="Seu nome: " />
+						<p:inputText id="sUsuarioTopico" value="#{topicoBean.usuario.nome}" readonly="true" />
+						
+						
+
+						<p:commandButton value="Salvar" action="#{topicoBean.inserir}"
+							update="@form" />
+						<p:button value="Fechar" onclick="PF('cadastroTopico').hide();" />
+					</h:panelGrid>
+				</h:form>
+			</div>
+
+		</p:dialog>
+		<p:dialog id="alteracaoTopicoDialog" header="Alteração de Pergunta"
+			widgetVar="alteracaoTopico" modal="true" resizable="false"
+			style="min-width: 300px" responsive="true" dynamic="true">
+
+			<div id="formAlteracaoTopico" class="externoFormulario">
+				<h:form id="frmAlteracaoTopico">
+					<p:messages autoUpdate="true" />
+					<h:panelGrid columns="2" styleClass="gridFormulario">
+						
+						<p:outputLabel for="txtNomeTopico" value="Título da pergunta: " />
+						<p:inputText id="txtNomeTopico" value="#{topicoBean.topicoSelecionado.titulo}" />
+
+						<p:outputLabel for="txtDescricaoTopico" value="Descrição do topico: " />
+						<p:inputTextarea id="txtDescricaoTopico"
+							value="#{topicoBean.topicoSelecionado.descricao}" cols="40" rows="6"/>
+
+						<p:commandButton value="Salvar" action="#{topicoBean.alterar}"
+							update="@form" />
+						<p:button value="Fechar" onclick="PF('alteracaoTopico').hide();" />
+
+					</h:panelGrid>
+				</h:form>
+			</div>
+
+		</p:dialog>
+		<p:dialog id="exclusaoTopicoDialog" header="Exclusao de Topico"
+			widgetVar="exclusaoTopico" modal="true" resizable="false"
+			style="min-width: 300px" responsive="true" dynamic="true">
+
+			<div id="formTopicoExclusao" class="externoFormulario">
+				<h:form id="frmTopicoExclusao">
+					<p:messages autoUpdate="true" />
+					<h:panelGrid styleClass="gridFormulario">
+
+					Tem certeza que deseja desativar a Pergunta <b><i>#{topicoBean.topicoSelecionado.titulo}</i></b>?
+				</h:panelGrid>
+					<h:panelGrid columns="2" styleClass="gridFormulario">
+						<p:column>
+							<p:commandButton value="Desativar" action="#{topicoBean.desativa}"
+								update="@form">
+							</p:commandButton>
+						</p:column>
+						<p:column>
+							<p:button value="Fechar" onclick="PF('exclusaoTopico').hide();" />
+						</p:column>
+					</h:panelGrid>
+				</h:form>
+			</div>
+
+		</p:dialog>
+
+
+
+
+
+
+
+
+	</ui:define>
+
+</ui:composition>

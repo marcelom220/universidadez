@@ -18,7 +18,7 @@ public class UniversidadeRepository implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static Logger log = Logger.getLogger(UniversidadeRepository.class);
 
-	private EntityManager em;
+	private  EntityManager em;
 
 	/*
 	 * Construtor com argumentos
@@ -28,7 +28,8 @@ public class UniversidadeRepository implements Serializable {
 	public UniversidadeRepository(EntityManager em) {
 		this.em = em;
 	}
-
+	public UniversidadeRepository()
+	{}
 	/**
 	 * Insere uma universidade no banco de dados.
 	 * 
@@ -96,6 +97,7 @@ public class UniversidadeRepository implements Serializable {
 		try {
 
 			et.begin();
+			universidade = em.merge(universidade);
 			em.remove(universidade);
 			et.commit();
 			log.info("excluiu a universidade.");

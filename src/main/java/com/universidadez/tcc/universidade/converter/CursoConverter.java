@@ -22,7 +22,7 @@ public class CursoConverter implements Converter {
 		EntityManager em = JpaUtil.getEntityManager();
 
 		try {
-			if (value != null && !" ".equals(value)) {
+			if (value != null && !" ".equals(value)&& !"Selecione".equals(value)) {
 				CursoRepository cr = new CursoRepository(em);
 				retorno = cr.buscaPorId(new Long(value));
 			}
@@ -34,7 +34,7 @@ public class CursoConverter implements Converter {
 
 	@Override
 	public String getAsString(FacesContext context, UIComponent component, Object value) {
-		if (value != null) {
+		if (value != null&& !"Selecione".equals(value)) {
 			Curso curso = (Curso) value;
 			return curso.getId() == null ? null : curso.getId().toString();
 		}

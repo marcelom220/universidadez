@@ -3,14 +3,12 @@ package com.universidadez.tcc.login.repository;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
-
 import org.apache.log4j.Logger;
-
+import com.universidadez.tcc.login.model.TipoUsuario;
 import com.universidadez.tcc.login.model.Usuario;
 import com.universidadez.tcc.util.Criptografia;
 
@@ -75,6 +73,19 @@ public class UsuarioRepository implements Serializable {
 		TypedQuery<Usuario> query = em.createNamedQuery("Usuario.listaAtivos", Usuario.class);
 		return query.getResultList();
 	}
+	public List<Usuario> listaAlunos() {
+
+		TypedQuery<Usuario> query = em.createNamedQuery("Usuario.listaAlunos", Usuario.class);
+		query.setParameter("tipoUsuario", TipoUsuario.ALUNO);
+		return query.getResultList();
+	}
+	public List<Usuario> listaProfessores() {
+
+		TypedQuery<Usuario> query = em.createNamedQuery("Usuario.listaProfessores", Usuario.class);
+		query.setParameter("tipoUsuario", TipoUsuario.PROFESSOR);
+		return query.getResultList();
+	}
+	
 
 	/**
 	 * Retorna um usuário do banco de dados, selecionado por id.
@@ -89,6 +100,10 @@ public class UsuarioRepository implements Serializable {
 	 */
 	public void alterar(Usuario usuario) {
 		EntityTransaction et = em.getTransaction();
+		
+		Criptografia c = new Criptografia();
+		String senha = usuario.getPassword();
+		usuario.setPassword(c.criptografiaSha256(senha));
 		try {
 			et.begin();
 			em.merge(usuario);

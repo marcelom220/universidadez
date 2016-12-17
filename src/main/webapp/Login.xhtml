@@ -9,8 +9,7 @@
 	
 	<ui:define name="content">
 		
-		
-		<h:form id="frm">
+		<h:form id="frm" >
 		
 			<p:messages autoUpdate="true" />
 			
@@ -19,11 +18,11 @@
      <h:graphicImage library="algaworks" name="images/logo2.png" style="max-width: 100%;
     height: auto; " />
     </f:facet>
-					<p:outputLabel value="Usuário" for="txtUsuario" style="text-align:middle;"/>
-					<p:inputText id="txtUsuario" size="20"
+					<p:outputLabel value="Matrícula:" for="txtUsuario" style="text-align:middle;"/>
+					<p:inputMask id="txtUsuario" size="20" mask="999999999"
 						value="#{loginBean.usuarioLogin.matricula}" />
 						
-					<p:outputLabel value="Senha" for="txtSenha" />
+					<p:outputLabel value="Senha:" for="txtSenha" />
 					<p:password id="txtSenha" size="20"
 						value="#{loginBean.usuarioLogin.password}" />
 						

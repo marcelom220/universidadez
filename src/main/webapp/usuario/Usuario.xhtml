@@ -1,0 +1,162 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/LayoutAluno.xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:o="http://omnifaces.org/ui">
+
+	
+	<f:metadata>
+		<f:viewAction action="#{usuarioBean.listaAtivos}" />
+		<f:viewAction action="#{indexBean.setUsuario()}" />
+	</f:metadata>
+
+	<ui:define name="content">
+    	<h1 class="aw-page-title">Lista de usuários</h1>
+		
+    	
+    	<h:form id="frm2">
+    	<c:if test="#{usuarioLogado.tipoUsuario == 'ADMINISTRADOR'}">
+    		<p:messages id="messages" autoUpdate="true" closable="true" />
+    		
+    		<p:toolbar style="margin-top: 20px">
+    			<p:toolbarGroup>
+    				<p:button value="Novo" outcome="/usuario/UsuarioCadastro.xhtml" style="noborder"/>
+    			</p:toolbarGroup>
+    		</p:toolbar>
+    	
+    		<p:tabView style="margin-top: 20px">
+	    	
+
+					
+					
+					<p:tab title="Dados pessoais">
+				<p:dataTable id="itensTable" value="#{usuarioBean.usuarios}"
+					var="usuario" emptyMessage="Nenhum usuario encontrado."
+					reflow="true" style="margin-top: 10px" rows="10" paginator="true" paginatorPosition="bottom">
+					
+					<p:column headerText="Nome" sortBy="#{usuario.nome}">
+						<h:outputText value="#{usuario.nome}" />
+					</p:column>
+					<p:column headerText="Data de Nascimento" sortBy="#{usuario.dataNascimento}">
+						<h:outputText value="#{usuario.dataNascimento}"  >
+						
+						</h:outputText>
+					</p:column>
+					<p:column headerText="Matricula" sortBy="#{usuario.matricula}">
+						<h:outputText value="#{usuario.matricula}" />
+					</p:column>
+					<p:column headerText="Sexo" style="" sortBy="#{usuario.sexo}">
+						<h:outputText value="#{usuario.sexo}" />
+					</p:column>
+					<p:column headerText="Cpf" sortBy="#{usuario.cpf}">
+						<h:outputText value="#{usuario.cpf}" />
+					</p:column>
+					<p:column>
+						<p:button title="alterar" icon="ui-icon-pencil"
+							outcome="/usuario/UsuarioCadastro.xhtml" >
+							<f:param name="usuario"  value="#{usuario.id}"/>
+						</p:button>
+						
+						<p:commandButton id="btnDesativara" icon="ui-icon-trash"
+						oncomplete="PF('confirmacaoDesativar').show()" process="@this"
+						update="@form">
+						<f:setPropertyActionListener value="#{usuario}"
+								target="#{usuarioBean.usuario}" />
+						</p:commandButton>
+						</p:column>
+					</p:dataTable>
+					</p:tab>
+
+				<p:tab title="Dados do sistema">
+					<p:dataTable id="itensTable1" value="#{usuarioBean.usuarios}"
+						var="usuario" emptyMessage="Nenhum usuario encontrado."
+						reflow="true" style="margin-top: 10px" rows="10" paginator="true" paginatorPosition="bottom">
+						
+						<p:column headerText="Nome" sortBy="#{usuario.nome}">
+							<h:outputText value="#{usuario.nome}" />
+						</p:column>
+						<p:column headerText="Código" sortBy="#{usuario.id}">
+							<h:outputText value="#{usuario.id}" />
+						</p:column>
+						<p:column headerText="Curso" sortBy="#{usuario.curso.nome}">
+							<h:outputText value="#{usuario.curso.nome}" />
+						</p:column>
+						<p:column headerText="Tipo" sortBy="#{usuario.tipoUsuario}">
+							<h:outputText value="#{usuario.tipoUsuario}" />
+						</p:column>
+						<p:column>
+						<p:button title="alterar" icon="ui-icon-pencil"
+							outcome="/usuario/UsuarioCadastro.xhtml" >
+							<f:param name="usuario"  value="#{usuario.id}"/>
+						</p:button>
+						
+						<p:commandButton id="btnDesativarb" icon="ui-icon-trash"
+						oncomplete="PF('confirmacaoDesativar').show()" process="@this"
+						update="@form">
+						<f:setPropertyActionListener value="#{usuario}"
+								target="#{usuarioBean.usuario}" />
+						</p:commandButton>
+						</p:column>
+					</p:dataTable>
+				</p:tab>
+
+
+
+				<p:tab title="Contatos">
+					<p:dataTable id="itensTable2" value="#{usuarioBean.usuarios}"
+						var="usuario" emptyMessage="Nenhum usuario encontrado."
+						reflow="true" style="margin-top: 10px" rows="10" paginator="true" paginatorPosition="bottom">
+
+						<p:column headerText="Nome" sortBy="#{usuario.nome}">
+							<h:outputText value="#{usuario.nome}" />
+						</p:column>
+						<p:column headerText="E-mail" sortBy="#{usuario.email}">
+							<h:outputText value="#{usuario.email}"  />
+						</p:column>
+						<p:column headerText="Telefone" sortBy="#{usuario.telefone}">
+
+							<h:outputText value="#{usuario.telefone}" />
+
+						</p:column>
+						<p:column>
+						<p:button title="alterar" icon="ui-icon-pencil"
+							outcome="/usuario/UsuarioCadastro.xhtml" >
+							<f:param name="usuario"  value="#{usuario.id}"/>
+						</p:button>
+						
+						<p:commandButton id="btnDesativar" icon="ui-icon-trash"
+						oncomplete="PF('confirmacaoDesativar').show()" process="@this"
+						update="@form">
+						<f:setPropertyActionListener value="#{usuario}"
+								target="#{usuarioBean.usuario}" />
+						</p:commandButton>
+						</p:column>
+					</p:dataTable>
+
+				</p:tab>
+
+			</p:tabView>
+
+
+			<p:confirmDialog widgetVar="confirmacaoDesativar" 
+				header="Desativação de usuario" resizable="false"
+				style="min-width: 300px" responsive="true" message="Tem certeza que deseja desativar o usuário de matrícula #{usuarioBean.usuario.matricula }?" >
+				<p:messages autoUpdate="true" />
+				<div align = "center">
+					
+				<p:button value="Não" onclick="PF('confirmacaoDesativar').hide()"  />
+				<p:commandButton value="Sim" action="#{usuarioBean.desativar}"
+					oncomplete="PF('confirmacaoDesativar').hide()" update="@form" />
+					</div>
+			</p:confirmDialog>
+
+
+
+</c:if>
+		</h:form>
+    </ui:define>
+	
+</ui:composition>

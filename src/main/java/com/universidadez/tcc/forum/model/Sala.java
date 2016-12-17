@@ -146,7 +146,7 @@ public class Sala implements Serializable {
 	 * @return the secao
 	 */
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "id_secao")
+	@JoinColumn(name = "id_forum")
 	public Forum getForum() {
 		return forum;
 	}

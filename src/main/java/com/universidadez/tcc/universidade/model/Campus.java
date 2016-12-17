@@ -12,11 +12,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-@NamedQueries({ @NamedQuery(name = "Campus.lista", query = "SELECT u FROM Campus u")})
+@NamedQueries({ @NamedQuery(name = "Campus.lista", query = "SELECT c FROM Campus c")})
 @Entity
 @Table(name = "tb_campus")
 public class Campus implements Serializable {
@@ -30,35 +31,30 @@ public class Campus implements Serializable {
 	private String nome;
 	private String rua;
 	private String numero;
+	private String bairro;
 	private String telefone;
-	private String dd;
 	
-	@ManyToOne
-	@JoinColumn(name="universidade_id")
+	
+	
 	 private Universidade universidade;
 	
 	
 	public Campus(){}
 	
-	public Campus(Long idCampus, String nome, String rua, String numero, String telefone, String dd, Universidade universidade) {
+	public Campus(Long idCampus, String nome, String rua, String numero,String bairro, String telefone, Universidade universidade) {
 		
 		this.idCampus = idCampus;
 		this.nome = nome;
 		this.rua = rua;
 		this.numero = numero;
+		this.bairro = bairro;
 		this.telefone = telefone;
-		this.dd = dd;
-		this.universidade = universidade;
+		this.universidade =  universidade;
 	}
 	
 	
 	
-	@NotEmpty
-	@Size(min = 5, max = 255)
-	@Column(length = 255, nullable = false, unique = true)
-	public String getNome() {
-		return nome;
-	}
+	
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -69,12 +65,20 @@ public class Campus implements Serializable {
 	public void setIdCampus(Long idCampus) {
 		this.idCampus = idCampus;
 	}
-
+	
+	@NotEmpty
+	@Size(min = 5, max = 255)
+	@Column(length = 255)
+	public String getNome() {
+		return nome;
+	}
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
 	
-	
+	@NotEmpty
+	@NotNull
+	@Column(length = 255)
 	public String getRua() {
 		return rua;
 	}
@@ -82,7 +86,9 @@ public class Campus implements Serializable {
 		this.rua = rua;
 	}
 	
-	
+	@NotEmpty
+	@NotNull
+	@Column(length = 25)
 	public String getNumero() {
 		return numero;
 	}
@@ -90,23 +96,31 @@ public class Campus implements Serializable {
 		this.numero = numero;
 	}
 	
-	
+	@NotEmpty
+	@NotNull
+	@Column(length = 60)
+	public String getBairro() {
+		return bairro;
+	}
+
+	public void setBairro(String bairro) {
+		this.bairro = bairro;
+	}
+
+	@NotEmpty
+	@NotNull
+	@Column(length = 20)
 	public String getTelefone() {
 		return telefone;
 	}
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
 	}
-	
-	
-	public String getDd() {
-		return dd;
-	}
-	public void setDd(String dd) {
-		this.dd = dd;
-	}
-	
 
+	
+	
+	@ManyToOne(optional= false)
+	@JoinColumn(name="universidade_id")
 	public Universidade getUniversidade() {
 		return universidade;
 	}
@@ -144,11 +158,7 @@ public class Campus implements Serializable {
 				return false;
 		} else if (!nome.equals(other.nome))
 			return false;
-		if (numero == null) {
-			if (other.numero != null)
-				return false;
-		} else if (!numero.equals(other.numero))
-			return false;
+		
 		return true;
 	}
 	

@@ -6,11 +6,14 @@ import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 
 import org.apache.log4j.Logger;
 
+
+import com.universidadez.tcc.universidade.model.Estados;
 import com.universidadez.tcc.universidade.model.Universidade;
 import com.universidadez.tcc.universidade.repository.UniversidadeRepository;
 import com.universidadez.tcc.util.JpaUtil;
@@ -30,6 +33,9 @@ public class UniversidadeBean implements Serializable {
 	 */
 	public UniversidadeBean() {
 		this.universidade = new Universidade();
+	}
+	public Estados[] getEstados() {
+		return Estados.values();
 	}
 
 	
@@ -77,7 +83,7 @@ public class UniversidadeBean implements Serializable {
 			FacesMessage mensagem = new FacesMessage("Universidade " + universidade.getNome() + " Alterada com sucesso.");
 			mensagem.setSeverity(FacesMessage.SEVERITY_INFO);
 			context.addMessage(null, mensagem);
-			//this.universidade = new Universidade();
+			this.universidade = new Universidade();
 		} catch (Exception e) {
 			FacesMessage mensagem = new FacesMessage("Problemas para alterar a universidade.");
 			mensagem.setSeverity(FacesMessage.SEVERITY_ERROR);
@@ -95,7 +101,8 @@ public class UniversidadeBean implements Serializable {
 			FacesMessage mensagem = new FacesMessage("Universidade " + universidade.getNome() + " excluida com sucesso.");
 			mensagem.setSeverity(FacesMessage.SEVERITY_INFO);
 			context.addMessage(null, mensagem);
-			//this.universidade = new Universidade();
+			this.universidade = new Universidade();
+			lista();
 		} catch (Exception e) {
 			FacesMessage mensagem = new FacesMessage("Problemas para remover a universidade.");
 			mensagem.setSeverity(FacesMessage.SEVERITY_ERROR);

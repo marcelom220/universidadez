@@ -1,0 +1,105 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/LayoutAluno.xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:o="http://omnifaces.org/ui">
+
+
+
+	
+	<ui:define name="content">
+    	<h1 class="aw-page-title">Lista de universidades</h1>
+		
+    	
+    	<h:form id="frm2">
+    	
+    	<f:metadata>
+    	<f:viewAction action="#{indexBean.setUniversidade()}" />
+		<f:viewAction action="#{universidadeBean.lista}" />
+		</f:metadata>
+		<c:if test="#{usuarioLogado.tipoUsuario == 'ADMINISTRADOR'}">
+    		<p:messages id="messages" autoUpdate="true" closable="true" />
+    		
+    		<p:toolbar style="margin-top: 20px">
+    			<p:toolbarGroup>
+    				<p:button value="Nova" outcome="/universidade/UniversidadeCadastro.xhtml"  />
+    			</p:toolbarGroup>
+    		</p:toolbar>
+
+
+			<p:dataTable id="universidadeTable" value="#{universidadeBean.universidades}"
+				var="universidade" emptyMessage="Nenhuma universidade encontrada."
+				reflow="true" style="margin-top: 10px" rows="10" paginator="true" paginatorPosition="bottom">
+
+				<p:column headerText="Id">
+					<h:outputText value="#{universidade.id}" />
+				</p:column>
+				<p:column headerText="Nome">
+					<h:outputText value="#{universidade.nome}" />
+				</p:column>
+				<p:column headerText="Estado">
+					<h:outputText value="#{universidade.estado}" />
+				</p:column>
+				<p:column headerText="Cidade" >
+					<h:outputText value="#{universidade.cidade}" />
+				</p:column>
+				
+
+				<p:column>
+					<p:button title="alterar" icon="ui-icon-pencil"
+						outcome="/universidade/UniversidadeCadastro.xhtml">
+						<f:param name="universidade" value="#{universidade.id}" />
+					</p:button>
+
+					<p:commandButton id="btnRemover" icon="ui-icon-trash" 
+						oncomplete="PF('confirmacaoRemover').show()" process="@this"
+						update=":frm2">
+						<f:setPropertyActionListener value="#{universidade}"
+							target="#{universidadeBean.universidade}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+
+
+
+
+
+			<p:confirmDialog widgetVar="confirmacaoRemover"
+				header="Excluir universidade" resizable="false"
+				style="min-width: 300px" responsive="true"
+				message="Tem certeza que deseja excluir a universidade #{universidadeBean.universidade.nome }?">
+				
+				<div align ="center" >
+				<p:button value="Não" onclick="PF('confirmacaoRemover').hide(); return false; "  />
+				<p:commandButton value="Sim" action="#{universidadeBean.remover}" 
+					update=":frm2:universidadeTable"
+					oncomplete="PF('confirmacaoRemover').hide()" />
+					</div>
+			</p:confirmDialog>
+
+			<p:dialog widgetVar="confirmacaoRemover1" header="Excluir universidade"
+				resizable="false" style="min-width: 300px" responsive="true"  >
+				<h:panelGroup id="removerPanel" layout="block" styleClass="ui-fluid">
+				<p:messages autoUpdate="true" />
+				
+				<h:outputText value="Tem certeza que deseja excluir a universidade #{universidadeBean.universidade.nome }?" />
+				 </h:panelGroup>
+	                
+	                 <p:button value="Não" onclick="PF('confirmacaoRemover').hide()" />
+	                 
+	        	<p:commandButton  value="Sim" action="#{universidadeBean.remover}" update=":frm2" process="@this" oncomplete="PF('confirmacaoRemover').hide()" 
+	        	
+	        			/>
+	        			
+	    	</p:dialog>
+			
+							
+			
+	    </c:if>	
+	    </h:form>
+    </ui:define>
+	
+</ui:composition>

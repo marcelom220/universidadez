@@ -1,6 +1,7 @@
 package com.universidadez.tcc.login.controller;
 
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import javax.inject.Named;
 import javax.persistence.EntityManager;
 
 import org.apache.log4j.Logger;
-
+import org.primefaces.model.DualListModel;
 
 import com.universidadez.tcc.login.model.TipoUsuario;
 import com.universidadez.tcc.login.model.Usuario;
@@ -33,8 +34,11 @@ public class UsuarioBean implements Serializable {
 
 	private Usuario usuario ;
 	private List<Usuario> usuarios;
-	private Usuario usuarioSelecionado;
+	private List<Usuario> professores;
+	private List<Usuario> alunos;
 	
+	private Usuario usuarioSelecionado;
+	private DualListModel<Usuario> model;
 	
 	
 
@@ -49,8 +53,10 @@ public class UsuarioBean implements Serializable {
 	    usuario = new Usuario();
 	}
 
-	/**
-	 */
+	
+	
+	
+	
 	public void insere() {
 		logger.info("iniciou o método cadastrar.");
 		EntityManager em = JpaUtil.getEntityManager();
@@ -58,6 +64,7 @@ public class UsuarioBean implements Serializable {
 		FacesContext context = FacesContext.getCurrentInstance();
 
 		try {
+			
 			ur.insere(usuario);
 			FacesMessage mensagem = new FacesMessage("Usuário " + usuario.getNome() + " cadastrado com sucesso.");
 			mensagem.setSeverity(FacesMessage.SEVERITY_INFO);
@@ -78,6 +85,26 @@ public class UsuarioBean implements Serializable {
 		UsuarioRepository ur = new UsuarioRepository(em);
 		this.usuarios = ur.listaAtivos();
 	}
+	
+	public void listaProfessores() {
+		logger.info("iniciou o método listaProfessores.");
+		EntityManager em = JpaUtil.getEntityManager();
+		UsuarioRepository ur = new UsuarioRepository(em);
+		this.professores = ur.listaProfessores();
+		
+	}
+	public void listaAlunos() {
+		logger.info("iniciou o método listaProfessores.");
+		EntityManager em = JpaUtil.getEntityManager();
+		UsuarioRepository ur = new UsuarioRepository(em);
+		this.alunos = ur.listaAlunos();
+		for (Usuario a : alunos) {
+			
+		
+		System.out.println("aluno:" + a);}
+	}
+	
+	
 
 
 	public void buscaPorId() {
@@ -107,19 +134,27 @@ public class UsuarioBean implements Serializable {
 		}
 	}
 
-	/**
-	 */
+	public void voltar() {
+	      try {
+			FacesContext.getCurrentInstance().getExternalContext().redirect("Usuario.xhtml");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public void desativar() {
 		logger.info("iniciou o método desativar.");
 		EntityManager em = JpaUtil.getEntityManager();
 		UsuarioRepository ur = new UsuarioRepository(em);
 		FacesContext context = FacesContext.getCurrentInstance();
 		try {
-			ur.desativar(usuarioSelecionado);
-			FacesMessage mensagem = new FacesMessage("Usuário " + usuarioSelecionado.getNome() + " desativado com sucesso.");
+			ur.desativar(usuario);
+			FacesMessage mensagem = new FacesMessage("Usuário " + usuario.getNome() + " desativado com sucesso.");
 			mensagem.setSeverity(FacesMessage.SEVERITY_INFO);
 			context.addMessage(null, mensagem);
-			//this.usuario = new Usuario();
+			this.usuario = new Usuario();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			FacesMessage mensagem = new FacesMessage("Problema para desativar o usuário, contato e o administrador.");
@@ -128,37 +163,36 @@ public class UsuarioBean implements Serializable {
 		}
 	}
 
-	
-
-	/**
-	 * @return the usuario
-	 */
 	public Usuario getUsuario() {
 		return usuario;
 	}
 
-	/**
-	 * @param usuario
-	 *            the usuario to set
-	 */
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
-	
 
-	/**
-	 * @return the usuarios
-	 */
 	public List<Usuario> getUsuarios() {
 		return usuarios;
 	}
 
-	/**
-	 * @param usuarios
-	 *            the usuarios to set
-	 */
 	public void setUsuarios(List<Usuario> usuarios) {
 		this.usuarios = usuarios;
+	}
+
+	public List<Usuario> getProfessores() {
+		return professores;
+	}
+
+	public void setProfessores(List<Usuario> professores) {
+		this.professores = professores;
+	}
+
+	public List<Usuario> getAlunos() {
+		return alunos;
+	}
+
+	public void setAlunos(List<Usuario> alunos) {
+		this.alunos = alunos;
 	}
 
 	public Usuario getUsuarioSelecionado() {
@@ -168,5 +202,17 @@ public class UsuarioBean implements Serializable {
 	public void setUsuarioSelecionado(Usuario usuarioSelecionado) {
 		this.usuarioSelecionado = usuarioSelecionado;
 	}
+
+	public DualListModel<Usuario> getModel() {
+		return model;
+	}
+
+	public void setModel(DualListModel<Usuario> model) {
+		this.model = model;
+	}
+
+	
+
+	
 	
 }

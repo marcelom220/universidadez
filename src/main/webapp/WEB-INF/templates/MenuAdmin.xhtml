@@ -1,33 +1,88 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:h="http://xmlns.jcp.org/jsf/html">
-	
-	<nav class="aw-menu" >
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+
+
+	<nav class="aw-menu">
 		<ul>
+
 			<li>
-				<h:link style=""><h:graphicImage library="algaworks" name="images/menu.png"  width="35" height="25"/>
-				Menu
-			</h:link>
+				<DIV align="center">
+					<h:graphicImage library="algaworks" name="images/logobranco.png"
+						width="70" height="60" align="center"  />
+					<br /> <br />
+					<c:if test="#{usuarioLogado.tipoUsuario == 'ALUNO'}">
+						<c:if test="#{usuarioLogado.sexo == 'f'}">
+							<h:graphicImage library="algaworks" name="images/avatar.png"
+								width="60" height="40" align="center" />
+						</c:if>
+						<c:if test="#{usuarioLogado.sexo =='m'}">
+							<h:graphicImage library="algaworks" name="images/reading.png"
+								width="60" height="40" align="center" />
+						</c:if>
+					</c:if>
+					<c:if test="#{usuarioLogado.tipoUsuario == 'PROFESSOR'}">
+						<h:graphicImage library="algaworks" name="images/professor.png"
+							width="60" height="40" align="center" />
+					</c:if>
+					<c:if test="#{usuarioLogado.tipoUsuario == 'ADMINISTRADOR'}">
+						<h:graphicImage library="algaworks" name="images/admin.png"
+							width="60" height="40" align="center" />
+					</c:if>
+					<br /> #{usuarioLogado.nome} <br /> <br />
+
+				</DIV> <p:commandLink action="#{loginBean.logout}">
+					<i class="fa fa-sign-out"></i>Logout		
+				</p:commandLink>
+
+
 			</li>
-			<li class="is-selected">
-				<h:link style=""><h:graphicImage library="algaworks" name="images/college.png"  width="35" height="25"/>
-				Inicio</h:link>
-			</li>
-			<li >
-			<h:link style=""><h:graphicImage library="algaworks" name="images/college.png"  width="35" height="25"/>
-				Universidade 
-			</h:link>
+
+			<li class="#{indexBean.classePrincipal}"><h:link style=""
+					outcome="/Inicio.xhtml">
+					<i class="fa fa-home"> </i>Inicio</h:link></li>
+			<c:if test="#{usuarioLogado.tipoUsuario == 'ADMINISTRADOR'}">
+			<li class="#{indexBean.classeUniversidade}"><h:link
+					outcome="/universidade/Universidade.xhtml">
+					<i class="fa fa-university"></i>Universidade 
+			 </h:link></li>
+			<li class="#{indexBean.classeCampus}"><h:link style=""
+					outcome="/campus/Campus.xhtml">
+					<i class="fa fa-institution"></i>Campus	 
+			</h:link></li>
+			<li class="#{indexBean.classeCurso}"><h:link style=""
+					outcome="/curso/Curso.xhtml">
+					<i class="fa fa-book"></i>Curso 
+			</h:link></li>
+			<li class="#{indexBean.classeTurma}"><h:link style=""
+					outcome="/turma/Turma.xhtml">
+					<i class="fa fa-houzz "></i>Turma 
+			</h:link></li>
 			
-			</li>
-			<li>
-			<h:link><h:graphicImage library="algaworks" name="images/reading.png"  width="35" height="25"/> Aluno </h:link>
-				
-			</li>
-			<li>
-			<h:link><h:graphicImage library="algaworks" name="images/professor.png"  width="35" height="25"/> Professor</h:link>
-				
-			</li>
+			<li class="#{indexBean.classeUsuario}"><h:link
+					outcome="/usuario/Usuario.xhtml">
+					<i class="fa fa-graduation-cap"></i>Usuario </h:link></li>
+			</c:if>
+			<li class="#{indexBean.classeForum}"><h:link
+					outcome="/forum/ForumListaAtivos">
+					<i class="fa fa-comments"></i>Forum</h:link></li>
+					
+					
+			<c:if test="#{usuarioLogado.tipoUsuario == 'ALUNO'||'PROFESSOR'}">
+			<li class="#{indexBean.aulas}"><h:link
+					outcome="/aula/Conteudos.xhtml">
+					<i class="fa fa-comments"></i>Conteúdo de aula</h:link></li>
+			<li class="#{indexBean.aviso}"><h:link
+					outcome="/aviso/Aviso.xhtml">
+					<i class="fa fa-comments"></i>Avisos</h:link></li>
+			</c:if>
 		</ul>
 	</nav>
-	
+
+
+
 </ui:composition>

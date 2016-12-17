@@ -1,0 +1,151 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/LayoutAluno.xhtml"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+
+
+	<f:metadata>
+		<f:viewAction action="#{respostaBean.listaAtivas}" />
+		<f:viewAction action="#{indexBean.setForum()}" />
+	</f:metadata>
+	<ui:define name="content">
+		<h1 class="aw-page-title">Lista de Respostas para a pegunta abaixo:</h1>
+
+		<div>
+			<h1>#{respostaBean.topico.titulo}</h1>
+			#{respostaBean.topico.sala.nome}
+		</div>
+		<br />
+		<br />
+		
+		<h:form id="frmListaTopico_respostas">
+			<f:metadata>
+				<o:viewParam name="topico" value="#{respostaBean.topico}" />
+			</f:metadata>
+				
+				<p:panel id="basic" icon="fa-user" header=" #{respostaBean.topico.usuario.nome} | Postado em #{respostaBean.topico.dataCadastro}"
+					style="margin-bottom:20px">
+
+					<h:outputText value="#{respostaBean.topico.descricao}" />
+					<br />
+					<br />
+					
+				</p:panel>
+				<p:commandButton value="Responder"
+					onclick="PF('cadastroResposta').show();" icon="ui-icon-star">
+
+				</p:commandButton>
+			<p:dataGrid id="gridResposta" var="respostaDaLista" value="#{respostaBean.respostas}"  columns="1" >
+
+				
+					<br />
+					<br />
+				<p:fieldset id="oculta" legend="Ocultar" toggleable="true" toggleSpeed="500">
+        		<p:ajax event="toggle" />
+          			<p:panel
+						header="#{respostaDaLista.usuario.nome} | em #{respostaDaLista.dataCadastro}">
+						<h:panelGrid columns="1" cellpadding="5" >
+							<h:outputText value="#{respostaDaLista.descricao}"></h:outputText>
+						</h:panelGrid>
+						
+			
+						
+						
+							<f:facet name="options">
+								<p:menu rendered="#{usuarioLogado == respostaDaLista.usuario}" >
+								
+									<p:menuitem value="Editar"
+										oncomplete="PF('alteracaoResposta').show();"
+										icon="ui-icon-pencil" process="@this" update="@form">
+										<f:setPropertyActionListener value="#{respostaDaLista}"
+											target="#{respostaBean.respostaSelecionada}" />
+
+									</p:menuitem>
+
+									<p:menuitem value="Remover"
+										oncomplete="PF('exclusaoResposta').show();"
+										icon="ui-icon-trash" process="@this" update="@form">
+										<f:setPropertyActionListener value="#{respostaDaLista}"
+											target="#{respostaBean.respostaSelecionada}" />
+									</p:menuitem>
+								</p:menu>
+							</f:facet>
+						
+					</p:panel>
+				</p:fieldset>
+			</p:dataGrid>	
+				
+			
+			
+		</h:form>
+		
+		<p:dialog id="cadastroRespostaDialog" header="Cadastro de Resposta"
+			widgetVar="cadastroResposta"  resizable="false"
+			style="min-width: 300px" responsive="true" dynamic="true">
+			<div id="formCadastroResposta" class="externoFormulario">
+				<h:form id="frmCadastroResposta">
+					<p:messages autoUpdate="true" />
+					<h:panelGrid columns="2" styleClass="gridFormulario">
+						
+						<p:outputLabel for="txtDescricaoResposta"
+							value="Resposta do topico: " />
+						<p:inputTextarea id="txtDescricaoResposta"
+							value="#{respostaBean.resposta.descricao}" required="true"
+							requiredMessage="Por favor escreva a resposta" />
+						
+						<p:commandButton value="Salvar" action="#{respostaBean.inserir}"
+							update="@form" />
+						<p:button value="Fechar" onclick="PF('cadastroResposta').hide();" />
+					</h:panelGrid>
+				</h:form>
+			</div>
+		</p:dialog>
+		<p:dialog id="alteracaoRespostaDialog" header="Alteração de Resposta"
+			widgetVar="alteracaoResposta"  resizable="false"
+			style="min-width: 300px" responsive="true" dynamic="true">
+
+			<div id="formAlteracaoTopico" class="externoFormulario">
+				<h:form id="frmAlteracaoResposta">
+					<p:messages autoUpdate="true" />
+					<h:panelGrid columns="2" styleClass="gridFormulario">				
+						
+						<p:outputLabel for="txtDescricaoResposta" value="Descrição da resposta: " />
+						<p:inputTextarea id="txtDescricaoResposta"
+							value="#{respostaBean.respostaSelecionada.descricao}" cols="40" rows="6"/>
+						<p:commandButton value="Salvar" action="#{respostaBean.alterar}"
+							update=":frmListaTopico_Respostas:gridResposta:oculta" />
+						<p:button value="Fechar" onclick="PF('alteracaoResposta').hide();" />
+					</h:panelGrid>
+				</h:form>
+			</div>
+		</p:dialog>
+		<p:dialog id="exclusaoRespostaDialog" header="Exclusao de Resposta"
+			widgetVar="exclusaoResposta"  resizable="false"
+			style="min-width: 300px" responsive="true" dynamic="true">
+			<div id="formRespostaExclusao" class="externoFormulario">
+				<h:form id="frmRespostaExclusao">
+					<p:messages autoUpdate="true" />
+					<h:panelGrid styleClass="gridFormulario">
+					Tem certeza que deseja desativar a Resposta selecionada <b></b>?
+				</h:panelGrid>
+					<h:panelGrid columns="2" styleClass="gridFormulario">
+						<p:column>
+							<p:commandButton value="Desativar" action="#{respostaBean.desativa}"
+								update="@form">
+							</p:commandButton>
+						</p:column>
+						<p:column>
+							<p:button value="Fechar" onclick="PF('exclusaoResposta').hide();" />
+						</p:column>
+					</h:panelGrid>
+				</h:form>
+			</div>
+		</p:dialog>
+		
+	</ui:define>
+</ui:composition>

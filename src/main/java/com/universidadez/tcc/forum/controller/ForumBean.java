@@ -37,11 +37,11 @@ public class ForumBean implements Serializable {
 	public void inserir() {
 		logger.info("Entrou no método inserir.");
 		EntityManager em = JpaUtil.getEntityManager();
-		ForumRepository sr = new ForumRepository(em);
+		ForumRepository fr = new ForumRepository(em);
 		FacesContext context = FacesContext.getCurrentInstance();
 
 		try {
-			sr.insere(forum);
+			fr.insere(forum);
 			FacesMessage mensagem = new FacesMessage("Forum " + forum.getNome() + " cadastrado com sucesso.");
 			mensagem.setSeverity(FacesMessage.SEVERITY_INFO);
 			context.addMessage(null, mensagem);
@@ -58,43 +58,51 @@ public class ForumBean implements Serializable {
 	public void listaAtivas() {
 		logger.info("Entrou no método listaAtivas.");
 		EntityManager em = JpaUtil.getEntityManager();
-		ForumRepository sr = new ForumRepository(em);
-		this.forums = sr.lista();
+		ForumRepository fr = new ForumRepository(em);
+		this.forums = fr.lista();
 	}
 
 	
 	public void buscaPorId() {
 		logger.info("Entrou no método buscaPorId.");
 		EntityManager em = JpaUtil.getEntityManager();
-		ForumRepository sr = new ForumRepository(em);
-		this.forum = sr.buscaPorId(forumSelecionado.getId());
+		ForumRepository fr = new ForumRepository(em);
+		this.forum = fr.buscaPorId(forumSelecionado.getId());
 	}
 
 	
 	public void alterar() {
 		logger.info("Entrou no método alterar.");
 		EntityManager em = JpaUtil.getEntityManager();
-		ForumRepository sr = new ForumRepository(em);
+		ForumRepository fr = new ForumRepository(em);
 		FacesContext context = FacesContext.getCurrentInstance();
-		sr.altera(forumSelecionado);
-		FacesMessage mensagem = new FacesMessage("Secao " + forumSelecionado.getNome() + " alterado com sucesso.");
-		mensagem.setSeverity(FacesMessage.SEVERITY_INFO);
-		context.addMessage(null, mensagem);
+			try {
+				fr.altera(forumSelecionado);
+				FacesMessage mensagem = new FacesMessage("Secao " + forumSelecionado.getNome() + " alterado com sucesso.");
+				mensagem.setSeverity(FacesMessage.SEVERITY_INFO);
+				context.addMessage(null, mensagem);
+	    
+			} catch (Exception e) {
+				FacesMessage mensagem = new FacesMessage("Problemas para alterar o forum.");
+				mensagem.setSeverity(FacesMessage.SEVERITY_ERROR);
+				context.addMessage(null, mensagem);
+	}
 	}
 
 	
 	public void desativa() {
 		logger.info("Entrou no método desativa.");
 		EntityManager em = JpaUtil.getEntityManager();
-		ForumRepository sr = new ForumRepository(em);
+		ForumRepository fr = new ForumRepository(em);
 		FacesContext context = FacesContext.getCurrentInstance();
 
 		try {
-			sr.desativa(forumSelecionado);
+			fr.desativa(forumSelecionado);
 			FacesMessage mensagem = new FacesMessage(
 					"Forum " + forumSelecionado.getNome() + " desativado com sucesso.");
 			mensagem.setSeverity(FacesMessage.SEVERITY_INFO);
 			context.addMessage(null, mensagem);
+			
 
 		} catch (Exception e) {
 			FacesMessage mensagem = new FacesMessage("Problema ao tentar desativar o forum.");

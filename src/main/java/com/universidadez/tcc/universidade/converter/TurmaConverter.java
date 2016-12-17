@@ -21,7 +21,7 @@ public class TurmaConverter implements Converter {
 		EntityManager em = JpaUtil.getEntityManager();
 
 		try {
-			if (value != null && !" ".equals(value)) {
+			if (value != null && !" ".equals(value)&& !"Selecione".equals(value)) {
 				TurmaRepository tr = new TurmaRepository(em);
 				retorno = tr.buscaPorId(new Long(value));
 			}
@@ -33,7 +33,7 @@ public class TurmaConverter implements Converter {
 
 	@Override
 	public String getAsString(FacesContext context, UIComponent component, Object value) {
-		if (value != null) {
+		if (value != null&& !"Selecione".equals(value)) {
 			Turma turma = (Turma) value;
 			return turma.getId() == null ? null : turma.getId().toString();
 		}

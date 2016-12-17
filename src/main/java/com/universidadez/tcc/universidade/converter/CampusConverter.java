@@ -21,7 +21,7 @@ public class CampusConverter implements Converter {
 		EntityManager em = JpaUtil.getEntityManager();
 
 		try {
-			if (value != null && !" ".equals(value)) {
+			if (value != null && !" ".equals(value)&& !"Selecione".equals(value)) {
 				CampusRepository cr = new CampusRepository(em);
 				retorno = cr.buscaPorId(new Long(value));
 			}
@@ -33,7 +33,7 @@ public class CampusConverter implements Converter {
 
 	@Override
 	public String getAsString(FacesContext context, UIComponent component, Object value) {
-		if (value != null) {
+		if (value != null&& !"Selecione".equals(value)) {
 			Campus campus = (Campus) value;
 			return campus.getIdCampus() == null ? null : campus.getIdCampus().toString();
 		}

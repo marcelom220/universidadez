@@ -12,6 +12,11 @@
 	</properties>
 
 	<dependencies>
+	<dependency>
+    <groupId>org.omnifaces</groupId>
+    <artifactId>omnifaces</artifactId>
+    <version>1.5</version>
+</dependency>
 		<dependency>
 			<groupId>org.primefaces</groupId>
 			<artifactId>primefaces</artifactId>
@@ -21,7 +26,7 @@
 		
 		<dependency>
 			<groupId>org.primefaces.themes</groupId>
-			<artifactId>bootstrap</artifactId>
+			<artifactId>start</artifactId>
 			<version>1.0.10</version>
 			<scope>compile</scope>
 		</dependency>

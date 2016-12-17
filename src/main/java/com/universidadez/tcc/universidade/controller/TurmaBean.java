@@ -1,6 +1,7 @@
 package com.universidadez.tcc.universidade.controller;
 
 import java.io.Serializable;
+
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
@@ -10,6 +11,7 @@ import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 
 import org.apache.log4j.Logger;
+import com.universidadez.tcc.login.model.Usuario;
 
 import com.universidadez.tcc.universidade.model.Turma;
 import com.universidadez.tcc.universidade.repository.TurmaRepository;
@@ -24,12 +26,15 @@ public class TurmaBean implements Serializable {
 
 	private Turma turma;
 	private List<Turma> turmas;
+	
+	
 
-	/**
-	 * 
-	 */
+	
+	
+	
 	public TurmaBean() {
 		this.turma = new Turma();
+		
 	}
 	
 	
@@ -55,17 +60,19 @@ public class TurmaBean implements Serializable {
 		}
 	}
 
-	/**
-	 */
+	
+	
+	
 	public void lista() {
 		logger.info("iniciou o método lista.");
 		EntityManager em = JpaUtil.getEntityManager();
 		TurmaRepository tr = new TurmaRepository(em);
 		this.turmas = tr.lista();
+		
+		
 	}
-
-	/**
-	 */
+   
+	
 	public void alterar() {
 		logger.info("iniciou o método alterar.");
 		EntityManager em = JpaUtil.getEntityManager();
@@ -77,7 +84,7 @@ public class TurmaBean implements Serializable {
 			FacesMessage mensagem = new FacesMessage("Turma " + turma.getNumero() + " Alterada com sucesso.");
 			mensagem.setSeverity(FacesMessage.SEVERITY_INFO);
 			context.addMessage(null, mensagem);
-			//this.universidade = new Universidade();
+			this.turma = new Turma();
 		} catch (Exception e) {
 			FacesMessage mensagem = new FacesMessage("Problemas para alterar a Turma.");
 			mensagem.setSeverity(FacesMessage.SEVERITY_ERROR);
@@ -95,7 +102,8 @@ public class TurmaBean implements Serializable {
 			FacesMessage mensagem = new FacesMessage("Turma " + turma.getNumero() + " excluida com sucesso.");
 			mensagem.setSeverity(FacesMessage.SEVERITY_INFO);
 			context.addMessage(null, mensagem);
-			//this.turma = new Turma();
+			this.turma = new Turma();
+			lista();
 		} catch (Exception e) {
 			FacesMessage mensagem = new FacesMessage("Problemas para remover a turma.");
 			mensagem.setSeverity(FacesMessage.SEVERITY_ERROR);
@@ -126,6 +134,14 @@ public class TurmaBean implements Serializable {
 	public void setTurmas(List<Turma> turmas) {
 		this.turmas = turmas;
 	}
+
+
+
+	
+
+	
+
+	
 
 
 }

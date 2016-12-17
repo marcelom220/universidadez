@@ -1,9 +1,11 @@
 /* BASE */
 body {
-	margin: 0;
+	margin: 1;
 	font-size: 13px;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	background-color:  whitesmoke;
+	color: rgb(33, 145, 192);
+	font-weight: 900;
 	
 }
 .aw-topbar{
@@ -17,7 +19,7 @@ body {
 
 /* TABVIEW */
 .ui-tabs .ui-tabs-nav li.ui-tabs-selected a {
-	color: #555;
+	color: rgb(33, 145, 192);
 }
 
 

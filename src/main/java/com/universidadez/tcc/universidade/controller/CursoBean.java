@@ -77,7 +77,7 @@ public class CursoBean implements Serializable {
 			FacesMessage mensagem = new FacesMessage("Curso " + curso.getNome() + " Alterado com sucesso.");
 			mensagem.setSeverity(FacesMessage.SEVERITY_INFO);
 			context.addMessage(null, mensagem);
-			//this.universidade = new Universidade();
+			this.curso = new Curso();
 		} catch (Exception e) {
 			FacesMessage mensagem = new FacesMessage("Problemas para alterar o curso.");
 			mensagem.setSeverity(FacesMessage.SEVERITY_ERROR);
@@ -95,7 +95,8 @@ public class CursoBean implements Serializable {
 			FacesMessage mensagem = new FacesMessage("Curso " + curso.getNome() + " excluido com sucesso.");
 			mensagem.setSeverity(FacesMessage.SEVERITY_INFO);
 			context.addMessage(null, mensagem);
-			//this.universidade = new Universidade();
+			this.curso = new Curso();
+			lista();
 		} catch (Exception e) {
 			FacesMessage mensagem = new FacesMessage("Problemas para remover o curso.");
 			mensagem.setSeverity(FacesMessage.SEVERITY_ERROR);

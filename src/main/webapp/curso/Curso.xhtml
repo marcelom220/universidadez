@@ -1,0 +1,92 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/LayoutAluno.xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:o="http://omnifaces.org/ui">
+
+
+
+	<ui:define name="content">
+		<h1 class="aw-page-title">Lista de Cursos</h1>
+
+
+		<h:form id="frm2">
+		<c:if test="#{usuarioLogado.tipoUsuario == 'ADMINISTRADOR'}">
+			<f:metadata>
+				<f:viewAction action="#{indexBean.setCurso()}" />
+				<f:viewAction action="#{cursoBean.lista}" />
+			</f:metadata>
+			<p:messages id="messages" autoUpdate="true" closable="true" />
+
+			<p:toolbar style="margin-top: 20px">
+				<p:toolbarGroup>
+					<p:button value="Novo" outcome="/curso/CursoCadastro.xhtml" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+
+			<p:dataTable id="cursoTable" value="#{cursoBean.cursos}" var="curso"
+				emptyMessage="Nenhum curso encontrado." reflow="true"
+				style="margin-top: 10px" rows="10" paginator="true"
+				paginatorPosition="bottom">
+
+				<p:column headerText="Id" sortBy="#{curso.id}">
+					<h:outputText value="#{curso.id}" />
+				</p:column>
+				<p:column headerText="Nome" sortBy="#{curso.nome}">
+					<h:outputText value="#{curso.nome}" />
+				</p:column>
+
+				<p:column headerText="Coordenador"
+					sortBy="#{curso.nome_coordenador}">
+					<h:outputText value="#{curso.nome_coordenador}" />
+				</p:column>
+
+				<p:column headerText="Campus" sortBy="#{curso.campus}">
+					<h:outputText value="#{curso.campus.nome}" />
+				</p:column>
+
+				<p:column>
+					<p:button title="alterar" icon="ui-icon-pencil"
+						outcome="/curso/CursoCadastro.xhtml">
+						<f:param name="curso" value="#{curso.id}" />
+					</p:button>
+
+					<p:commandButton id="btnRemover" icon="ui-icon-trash"
+						oncomplete="PF('confirmacaoRemover').show()" process="@this"
+						update=":frm2">
+						<f:setPropertyActionListener value="#{curso}"
+							target="#{cursoBean.curso}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+
+
+
+
+
+
+
+			<p:confirmDialog widgetVar="confirmacaoRemover"
+				header="Excluir campus" resizable="false" style="min-width: 300px"
+				responsive="true" message="Tem certeza que deseja excluir o curso #{cursoBean.curso.nome }?">
+					<p:messages autoUpdate="true" />
+					<div align="center">
+				<p:button value="Não"
+					onclick="PF('confirmacaoRemover').hide(); return false;" />
+				<p:commandButton value="Sim" action="#{cursoBean.remover}"
+					update=":frm2" process="@this"
+					oncomplete="PF('confirmacaoRemover').hide()" />
+					</div>
+			</p:confirmDialog>
+
+
+
+		</c:if>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

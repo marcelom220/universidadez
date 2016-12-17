@@ -3,18 +3,22 @@ package com.universidadez.tcc.universidade.controller;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Named;
 import javax.persistence.EntityManager;
 
 import org.apache.log4j.Logger;
 
+
 import com.universidadez.tcc.universidade.model.Campus;
 import com.universidadez.tcc.universidade.repository.CampusRepository;
-import com.universidadez.tcc.util.JpaUtil;
 
+import com.universidadez.tcc.util.JpaUtil;
+@Named
 @ManagedBean
 @SessionScoped
 public class CampusBean implements Serializable {
@@ -24,18 +28,24 @@ public class CampusBean implements Serializable {
 
 	private Campus campus;
 	private List<Campus> campusc;
-
+	
+	
+	
 	/**
 	 * 
 	 */
-	public CampusBean() {
-		this.campus = new Campus();
+	
+	@PostConstruct
+	public void init() {
+	    campus = new Campus();
+	    
+	   
 	}
 
 	
-
-	/**
-	 */
+	
+	
+	
 	public void cadastrar() {
 		logger.info("iniciou o método cadastrar.");
 		EntityManager em = JpaUtil.getEntityManager();
@@ -77,7 +87,7 @@ public class CampusBean implements Serializable {
 			FacesMessage mensagem = new FacesMessage("Campus " + campus.getNome() + " Alterado com sucesso.");
 			mensagem.setSeverity(FacesMessage.SEVERITY_INFO);
 			context.addMessage(null, mensagem);
-			//this.universidade = new Universidade();
+			this.campus = new Campus();
 		} catch (Exception e) {
 			FacesMessage mensagem = new FacesMessage("Problemas para alterar o campus.");
 			mensagem.setSeverity(FacesMessage.SEVERITY_ERROR);
@@ -95,7 +105,8 @@ public class CampusBean implements Serializable {
 			FacesMessage mensagem = new FacesMessage("Campus " + campus.getNome() + " excluido com sucesso.");
 			mensagem.setSeverity(FacesMessage.SEVERITY_INFO);
 			context.addMessage(null, mensagem);
-			//this.campus = new Campus();
+			this.campus = new Campus();
+			lista();
 		} catch (Exception e) {
 			FacesMessage mensagem = new FacesMessage("Problemas para remover o campus.");
 			mensagem.setSeverity(FacesMessage.SEVERITY_ERROR);
@@ -125,6 +136,9 @@ public class CampusBean implements Serializable {
 	public void setCampusc(List<Campus> campusc) {
 		this.campusc = campusc;
 	}
+
+
+	
 
 
 }

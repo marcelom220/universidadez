@@ -1,0 +1,115 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/WEB-INF/templates/LayoutAluno.xhtml"
+	xmlns:o="http://omnifaces.org/ui">
+
+
+
+
+	<ui:define name="content">
+		<h1 class="aw-page-title">Lista de Turmas</h1>
+
+
+		<h:form id="frm2">
+		
+			<f:metadata>
+				<f:viewAction action="#{turmaBean.lista}" />
+				<f:viewAction action="#{indexBean.setTurma()}" />
+			</f:metadata>
+			<c:if test="#{usuarioLogado.tipoUsuario == 'ADMINISTRADOR'}">
+			<p:messages id="messages" autoUpdate="true" closable="true" />
+
+			<p:toolbar style="margin-top: 20px">
+				<p:toolbarGroup>
+					<p:button title="Criar uma Turma" value="Novo"
+						outcome="/turma/TurmaCadastro.xhtml" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+
+			<p:dataTable id="turmaTable"
+				value="#{turmaBean.turmas}" var="turma"
+				emptyMessage="Nenhuma turma encontrada." reflow="true"
+				style="margin-top: 10px" rows="10" paginator="true"
+				paginatorPosition="bottom">
+
+				<p:column headerText="Id" sortBy="#{turma.id}">
+					<h:outputText value="#{turma.id}" />
+				</p:column>
+				<p:column headerText="Professor" sortBy="#{turma.professor.id}">
+					<h:outputText value="#{turma.professor.nome}" />
+				</p:column>
+				
+				
+				<p:column headerText="Numero" sortBy="#{turma.numero}">
+					<h:outputText value="#{turma.numero}" />
+				</p:column>
+
+				<p:column headerText="Alunos"
+					style="width: 100px; text-align: center">
+					<p:commandButton icon="ui-icon-extlink" title="Alunos"
+						
+						oncomplete="PF('mostraAlunos').show()" update="@form">
+						<f:setPropertyActionListener target="#{turmaBean.turma}"
+							value="#{turma}" />
+					</p:commandButton>
+				</p:column>
+
+
+				
+				<p:column headerText="Curso" sortBy="#{turma.curso.nome}">
+					<h:outputText value="#{turma.curso.nome}" />
+				</p:column>
+
+				<p:column>
+					<p:button title="Alterar" icon="ui-icon-pencil"
+						outcome="/turma/TurmaCadastro.xhtml">
+						<f:param name="turma" value="#{turma.id}" />
+					</p:button>
+
+					<p:commandButton title="Excluir" id="btnRemover" icon="ui-icon-trash"
+						oncomplete="PF('confirmacaoRemover').show()" process="@this"
+						update=":frm2">
+						<f:setPropertyActionListener value="#{turma}"
+							target="#{turmaBean.turma}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+
+
+			<p:confirmDialog widgetVar="confirmacaoRemover"
+				header="Excluir turma" resizable="false"
+				style="min-width: 300px" responsive="true" message="Tem certeza que deseja excluir a turma #{turmaBean.turma.numero }?">
+					<p:messages autoUpdate="true" />
+					<div align="center">
+				<p:button value="Não" onclick="PF('confirmacaoRemover').hide(); return false;" />
+				<p:commandButton value="Sim" action="#{turmaBean.remover}"
+					update=":frm2" process="@this"
+					oncomplete="PF('confirmacaoRemover').hide()" />
+					</div>
+			</p:confirmDialog>
+			
+			<p:dialog id="mostraAlunosDialog" header="Turmas"
+				widgetVar="mostraAlunos" resizable="false"
+				style="min-width: 480px" responsive="true">
+				<p:dataList value="#{turmaBean.turma.listaAlunos}"
+					var="aluno" itemType="disc" emptyMessage="Nenhuma turma encontrada."
+					>
+					
+					<h:outputText
+						value="aluno id #{aluno.id } e nome #{aluno.nome}"  />
+    				
+    			</p:dataList>
+				
+			</p:dialog>
+
+
+		</c:if>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

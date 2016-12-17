@@ -4,18 +4,19 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
 	template="/WEB-INF/templates/LayoutAluno.xhtml">
-	
+
+	<f:metadata>
+		<f:viewAction action="#{indexBean.setPrincipal()}" />
+	</f:metadata>
 	<ui:define name="content">
-		<h1 class="aw-page-title">Seja bem vindo!</h1>
-		<h:graphicImage library="algaworks" name="images/logo3.png" />
+	
 		
-		<h:form id="frm">
+		<h:form>
+		<h:graphicImage library="algaworks" name="images/estuda.png"  width=" 100%"
+     		background-size=" 100% 100%"/>
+        
+		</h:form>	
 		
-        <p:outputLabel value="Nome:" for="nome-user" />
-        <p:inputText  id="nome-user" size="60"
-                required="true"  requiredMessage="Campo Nome deve ser preenchido."/>
-			
-		</h:form>
 	</ui:define>
 	
 </ui:composition>

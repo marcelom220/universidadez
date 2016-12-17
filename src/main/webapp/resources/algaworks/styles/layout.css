@@ -7,13 +7,10 @@
 	min-height: 50px;
 	z-index: 9999;
 	
-	background-color: #1e94d2;
+	background-color: rgb(33, 145, 192);
 }
 
-.aw-topbar > img {
-	margin-top: 10px;
-	margin-left: 5px;
-}
+
 
 /* SIDEBAR */
 .aw-sidebar {
@@ -27,7 +24,7 @@
 	transition: margin-left 0.5s;
 	overflow-y: auto;
 	
-	background-color: #f6f6f6;
+	background-color: #36393e;
 	border-right: 1px solid #eaeaea;
 }
 
@@ -43,6 +40,7 @@
 	.aw-sidebar.is-toggled {
 		margin-left: -211px;
 	}
+	
 }
 
 /* CONTENT */
@@ -60,4 +58,5 @@
 	.aw-content.is-toggled {
 		margin-left: 0;
 	}
+	
 }

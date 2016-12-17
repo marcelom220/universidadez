@@ -5,8 +5,8 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:p="http://primefaces.org/ui">
-	
-	
+
+
 
 <h:head>
 	<f:facet name="first">
@@ -19,37 +19,35 @@
 	<h:outputStylesheet library="algaworks" name="styles/custom.css" />
 	<h:outputStylesheet library="algaworks" name="styles/layout.css" />
 	<h:outputStylesheet library="algaworks" name="styles/components.css" />
-	<h:outputStylesheet library="awesome" name="css/font-awesome.css"/>
-	
-	<h:outputScript target="body" library="primefaces" name="jquery/jquery.js" />
-	<h:outputScript target="body" library="algaworks" name="javascripts/app.js" />
+	<h:outputScript target="body" library="primefaces"
+		name="jquery/jquery.js" />
+	<h:outputScript target="body" library="algaworks"
+		name="javascripts/app.js" />
 </h:head>
 
 <h:body>
 
-	<header class="aw-topbar"   >
-		
+	<header class="aw-topbar">
+
 		<p:outputLabel>Sistema de Comunicação Acadêmica</p:outputLabel>
-		
+
 		<a href="#" class="aw-toggle  js-toggle"><i class="fa  fa-bars"></i></a>
 	</header>
-	
+
 	<aside class="aw-sidebar  js-sidebar">
-	<c:if test="#{usuarioLogado.tipoUsuario == 'ALUNO'}">
-		<ui:include src="MenuAluno.xhtml" />
-	</c:if>
-	<c:if test="#{usuarioLogado.tipoUsuario == 'PROFESSOR'}">
-		<ui:include src="MenuProf.xhtml" />
-	</c:if>
-	<c:if test="#{usuarioLogado.tipoUsuario == 'ADMINISTRADOR'}">
-		<ui:include src="MenuAdmin.xhtml" />
-	</c:if>
+		
+			<ui:include src="MenuAdmin.xhtml" />
+		
 	</aside>
+
 	
 	<section class="aw-content  js-content">
+
 		<ui:insert name="content" />
+
 	</section>
-	
+
+
 </h:body>
 
 </html>

@@ -46,7 +46,7 @@ public class LoginBean implements Serializable {
 
 			HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
 			request.getSession().setAttribute("usuarioLogado", usuarioAutenticado);
-			return "/Usuario?faces-redirect=true";
+			return "Inicio?faces-redirect=true";
 
 		} else {
 

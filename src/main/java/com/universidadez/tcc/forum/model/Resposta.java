@@ -15,11 +15,13 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+
 
 import com.universidadez.tcc.login.model.Usuario;
 
 
-@NamedQuery(name = "Resposta.listaAtivos", query = "SELECT s FROM Resposta s WHERE s.topico = :topico and s.ativo = true")
+@NamedQuery(name = "Resposta.listaAtivos", query = "SELECT r FROM Resposta r WHERE r.topico = :topico and r.ativo = true")
 @Entity
 @Table(name = "tb_resposta")
 public class Resposta implements Serializable {
@@ -28,7 +30,7 @@ public class Resposta implements Serializable {
 
 	private Long id;
 	private String descricao;
-	private Date dataCatastro;
+	private Date dataCadastro;
 	private boolean ativo;
 	private Topico topico;
 	private Usuario usuario;
@@ -47,10 +49,10 @@ public class Resposta implements Serializable {
 	 * @param topico
 	 * @param usuario
 	 */
-	public Resposta(Long id, String descricao, Date dataCatastro, boolean ativo, Topico topico, Usuario usuario) {
+	public Resposta(Long id, String descricao, Date dataCadastro, boolean ativo, Topico topico, Usuario usuario) {
 		this.id = id;
 		this.descricao = descricao;
-		this.dataCatastro = dataCatastro;
+		this.dataCadastro = dataCadastro;
 		this.ativo = ativo;
 		this.topico = topico;
 		this.usuario = usuario;
@@ -76,6 +78,7 @@ public class Resposta implements Serializable {
 	/**
 	 * @return the descricao
 	 */
+	@NotNull
 	@Lob
 	@Column(nullable = false)
 	public String getDescricao() {
@@ -93,23 +96,25 @@ public class Resposta implements Serializable {
 	/**
 	 * @return the dataCatastro
 	 */
+	@NotNull
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
-	public Date getDataCatastro() {
-		return dataCatastro;
+	public Date getDataCadastro() {
+		return dataCadastro;
 	}
 
 	/**
 	 * @param dataCatastro
 	 *            the dataCatastro to set
 	 */
-	public void setDataCatastro(Date dataCatastro) {
-		this.dataCatastro = dataCatastro;
+	public void setDataCadastro(Date dataCadastro) {
+		this.dataCadastro = dataCadastro;
 	}
 
 	/**
 	 * @return the ativo
 	 */
+	@NotNull
 	@Column(nullable = false)
 	public boolean isAtivo() {
 		return ativo;
@@ -157,11 +162,6 @@ public class Resposta implements Serializable {
 		this.usuario = usuario;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -170,11 +170,6 @@ public class Resposta implements Serializable {
 		return result;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -191,5 +186,7 @@ public class Resposta implements Serializable {
 			return false;
 		return true;
 	}
+
+	
 
 }

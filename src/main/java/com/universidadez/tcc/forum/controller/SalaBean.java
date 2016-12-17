@@ -9,6 +9,8 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 
+import org.apache.log4j.Logger;
+
 import com.universidadez.tcc.forum.model.Forum;
 import com.universidadez.tcc.forum.model.Sala;
 import com.universidadez.tcc.forum.repository.SalaRepository;
@@ -21,7 +23,7 @@ import com.universidadez.tcc.util.JpaUtil;
 public class SalaBean implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
-
+	private static Logger logger = Logger.getLogger(SalaBean.class);
 	private Sala sala = new Sala();
 	private List<Sala> salas;
 	private Sala salaSelecionada;
@@ -35,6 +37,7 @@ public class SalaBean implements Serializable {
 
 
 		public void inserir() {
+		logger.info("Entrou no método inserir.");
 		EntityManager em = JpaUtil.getEntityManager();
 		SalaRepository sr = new SalaRepository(em);
 		FacesContext context = FacesContext.getCurrentInstance();
@@ -56,6 +59,7 @@ public class SalaBean implements Serializable {
 
 	
 		public void listaAtivas() {
+		logger.info("Entrou no método listaAtivas.");
 		EntityManager em = JpaUtil.getEntityManager();
 		SalaRepository sr = new SalaRepository(em);
 		this.salas = sr.lista(forum);
@@ -63,6 +67,7 @@ public class SalaBean implements Serializable {
 
 	
 	public void alterar() {
+		logger.info("Entrou no método alterar.");
 		EntityManager em = JpaUtil.getEntityManager();
 		SalaRepository sr = new SalaRepository(em);
 		FacesContext context = FacesContext.getCurrentInstance();
@@ -80,6 +85,7 @@ public class SalaBean implements Serializable {
 
 	
 		public void desativa() {
+		logger.info("Entrou no método desativa.");
 		EntityManager em = JpaUtil.getEntityManager();
 		SalaRepository sr = new SalaRepository(em);
 		FacesContext context = FacesContext.getCurrentInstance();

@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,7 +28,7 @@ public class Universidade implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private Long id;
-	private String estado;
+	private Estados estado;
 	private String nome;
 	private String cidade;
 	
@@ -37,7 +39,7 @@ public class Universidade implements Serializable {
 	
 	public Universidade(){}
 	
-	public Universidade(Long id, String estado, String nome, String cidade) {
+	public Universidade(Long id, Estados estado, String nome, String cidade) {
 		
 		this.id = id;
 		this.estado = estado;
@@ -50,15 +52,17 @@ public class Universidade implements Serializable {
 	public Long getId() {
 		return id;
 	}
-	public void setId(long id) {
+	
+	public void setId(Long id) {
 		this.id = id;
 	}
-	
-	
-	public String getEstado() {
+
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	public Estados getEstado() {
 		return estado;
 	}
-	public void setEstado(String estado) {
+	public void setEstado(Estados estado) {
 		this.estado = estado;
 	}
 	
@@ -72,22 +76,19 @@ public class Universidade implements Serializable {
 		this.nome = nome;
 	}
 	
-	
+	@NotEmpty
 	public String getCidade() {
 		return cidade;
 	}
 	public void setCidade(String cidade) {
 		this.cidade = cidade;
 	}
-	
-	
-	
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
 		return result;
 	}
@@ -101,7 +102,10 @@ public class Universidade implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Universidade other = (Universidade) obj;
-		if (id != other.id)
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
 			return false;
 		if (nome == null) {
 			if (other.nome != null)
@@ -110,6 +114,12 @@ public class Universidade implements Serializable {
 			return false;
 		return true;
 	}
+	
+	
+	
+
+	
+	
 
 	
 	

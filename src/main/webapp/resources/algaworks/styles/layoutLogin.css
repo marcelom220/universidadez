@@ -7,7 +7,7 @@
 	min-height: 50px;
 	z-index: 9999;
 	
-	background-color: #1e94d2;
+	background-color: rgb(33, 145, 192);
 }
 
 
@@ -24,7 +24,7 @@
 	transition: margin-left 0.5s;
 	overflow-y: auto;
 	
-	background-color: #f6f6f6;
+	background-color: rgb(33, 145, 192);
 	border-right: 1px solid #eaeaea;
 }
 

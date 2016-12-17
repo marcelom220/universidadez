@@ -15,12 +15,14 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.universidadez.tcc.login.model.Usuario;
 
 
 
-@NamedQuery(name = "Topicos.listaAtivos", query = "SELECT s FROM Topico s WHERE s.sala = :sala and s.ativo = true")
+@NamedQuery(name = "Topicos.listaAtivos", query = "SELECT t FROM Topico t WHERE t.sala = :sala and t.ativo = true")
 @Entity
 @Table(name = "tb_topico")
 public class Topico implements Serializable {
@@ -30,7 +32,7 @@ public class Topico implements Serializable {
 	private Long id;
 	private String titulo;
 	private String descricao;
-	private Date dataCatastro;
+	private Date dataCadastro;
 	private boolean ativo;
 	private Sala sala;
 	private Usuario usuario;
@@ -50,12 +52,12 @@ public class Topico implements Serializable {
 	 * @param sala
 	 * @param usuario
 	 */
-	public Topico(Long id, String titulo, String descricao, Date dataCatastro, boolean ativo, Sala sala,
+	public Topico(Long id, String titulo, String descricao, Date dataCadastro, boolean ativo, Sala sala,
 			Usuario usuario) {
 		this.id = id;
 		this.titulo = titulo;
 		this.descricao = descricao;
-		this.dataCatastro = dataCatastro;
+		this.dataCadastro = dataCadastro;
 		this.ativo = ativo;
 		this.sala = sala;
 		this.usuario = usuario;
@@ -81,6 +83,8 @@ public class Topico implements Serializable {
 	/**
 	 * @return the titulo
 	 */
+	@NotNull
+	@Size(min = 3, max = 255)
 	@Column(length = 255, nullable = false)
 	public String getTitulo() {
 		return titulo;
@@ -97,6 +101,7 @@ public class Topico implements Serializable {
 	/**
 	 * @return the descricao
 	 */
+	@NotNull
 	@Lob
 	@Column(nullable = false)
 	public String getDescricao() {
@@ -114,23 +119,25 @@ public class Topico implements Serializable {
 	/**
 	 * @return the dataCatastro
 	 */
+	@NotNull
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
-	public Date getDataCatastro() {
-		return dataCatastro;
+	public Date getDataCadastro() {
+		return dataCadastro;
 	}
 
 	/**
 	 * @param dataCatastro
 	 *            the dataCatastro to set
 	 */
-	public void setDataCatastro(Date dataCatastro) {
-		this.dataCatastro = dataCatastro;
+	public void setDataCadastro(Date dataCadastro) {
+		this.dataCadastro = dataCadastro;
 	}
 
 	/**
 	 * @return the ativo
 	 */
+	@NotNull
 	@Column(nullable = false)
 	public boolean isAtivo() {
 		return ativo;

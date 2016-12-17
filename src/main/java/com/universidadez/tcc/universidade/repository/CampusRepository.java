@@ -8,7 +8,9 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
 
 import org.apache.log4j.Logger;
+
 import com.universidadez.tcc.universidade.model.Campus;
+
 
 
 
@@ -60,9 +62,11 @@ public class CampusRepository implements Serializable {
 
 	 */
 	public List<Campus> lista() {
-
+		log.info("Entrou no método lista");
 		TypedQuery<Campus> query = em.createNamedQuery("Campus.lista", Campus.class);
 		return query.getResultList();
+		
+		
 	}
 
 	/**
@@ -95,6 +99,7 @@ public class CampusRepository implements Serializable {
 		try {
 
 			et.begin();
+			campus = em.merge(campus);
 			em.remove(campus);
 			et.commit();
 			log.info("excluiu o campus.");

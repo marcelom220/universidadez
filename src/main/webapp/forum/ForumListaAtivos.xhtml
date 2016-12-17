@@ -1,0 +1,159 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/LayoutAluno.xhtml"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">>
+
+
+
+
+	<ui:define name="content">
+		<h1 class="aw-page-title">Lista de Fórums</h1>
+
+		<f:metadata>
+			<f:viewAction action="#{forumBean.listaAtivas}" />
+			<f:viewAction action="#{turmaBean.lista}" />
+			<f:viewAction action="#{indexBean.setForum()}" />
+		</f:metadata>
+		<h:form id="frm2">
+		
+			<c:if test="#{usuarioLogado.tipoUsuario == 'ADMINISTRADOR'}">
+				<p:commandButton value="Nova Seção"
+					onclick="PF('cadastroForum').show();" icon="ui-icon-star" />
+			</c:if>
+
+			<p:dataGrid var="forumDaLista" value="#{forumBean.forums}"
+				columns="1" emptyMessage="sem fórum cadastrado">
+
+				<p:panel id="basic"
+					header="#{forumDaLista.nome} Turma: #{forumDaLista.id}"
+					style="margin-bottom:20px">
+
+					<h:outputText value="#{forumDaLista.descricao}" />
+
+					<br />
+					<br />
+					<p:commandButton icon="ui-icon-circle-triangle-e"
+						value="Clique aqui para entrar no fórum."
+						action="SalaListaAtivosPorForum?faces-redirect=true">
+						<f:setPropertyActionListener value="#{forumDaLista}"
+							target="#{salaBean.forum}" />
+					</p:commandButton>
+					<c:if test="#{usuarioLogado.tipoUsuario == 'ADMINISTRADOR'}">
+						<f:facet name="options">
+							<p:menu>
+								<p:menuitem value="Editar"
+									oncomplete="PF('alteracaoForum').show();" icon="ui-icon-pencil"
+									process="@this" update="@form">
+									<f:setPropertyActionListener value="#{forumDaLista}"
+										target="#{forumBean.forumSelecionado}" />
+								</p:menuitem>
+
+								<p:menuitem value="Remover"
+									oncomplete="PF('exclusaoForum').show();" icon="ui-icon-trash"
+									process="@this" update="@form">
+									<f:setPropertyActionListener value="#{forumDaLista}"
+										target="#{forumBean.forumSelecionado}" />
+								</p:menuitem>
+							</p:menu>
+						</f:facet>
+					</c:if>
+				</p:panel>
+			</p:dataGrid>
+		</h:form>
+		<p:dialog id="cadastroForumDialog" header="Cadastro de Fórum"
+			widgetVar="cadastroForum" modal="true" resizable="false"
+			style="min-width: 300px" responsive="true" dynamic="true">
+
+			<div id="formCadastroForum" class="externoFormulario">
+				<h:form id="frmCadastroForum">
+					<p:messages autoUpdate="true" />
+					<h:panelGrid columns="2" styleClass="gridFormulario">
+
+						<p:outputLabel for="txtNomeForum" value="Nome do Fórum: " />
+						<p:inputText id="txtNomeForum" value="#{forumBean.forum.nome}" />
+
+						<p:outputLabel for="txtDescricaoForum"
+							value="Descrição do fórum: " />
+						<p:inputTextarea id="txtDescricaoForum"
+							value="#{forumBean.forum.descricao}" />
+
+						<p:outputLabel id="turmalb" value="Turma" for="turma" />
+						<h:selectOneMenu id="turma" value="#{forumBean.forum.turma}"
+							required="true" requiredMessage="Por favor selecione uma turma">
+							<f:selectItem itemLabel="Selecione" />
+							<f:selectItems value="#{turmaBean.turmas}" var="tur"
+								itemLabel="#{tur.id}" itemValue="#{tur}" />
+						</h:selectOneMenu>
+						<p:commandButton value="Salvar" action="#{forumBean.inserir}"
+							update="@form" />
+						<p:button value="Fechar" onclick="PF('cadastroForum').hide();" />
+					</h:panelGrid>
+				</h:form>
+			</div>
+		</p:dialog>
+
+		<p:dialog id="exclusaoSecaoDialog" header="Exclusao de Fórum"
+			widgetVar="exclusaoForum" modal="true" resizable="false"
+			style="min-width: 300px" responsive="true" dynamic="true">
+
+			<div id="formForumExclusao" class="externoFormulario">
+				<h:form id="frmForumExclusao">
+					<p:messages autoUpdate="true" />
+					<h:panelGrid styleClass="gridFormulario">
+
+							Tem certeza que deseja desativar o Fórum <b><i>#{forumBean.forumSelecionado.nome}</i></b>?
+						</h:panelGrid>
+					<h:panelGrid columns="2" styleClass="gridFormulario">
+						<p:column>
+							<p:commandButton value="Desativar" action="#{forumBean.desativa}"
+								update="@form">
+							</p:commandButton>
+						</p:column>
+						<p:column>
+							<p:button value="Fechar" onclick="PF('exclusaoForum').hide();" />
+						</p:column>
+					</h:panelGrid>
+				</h:form>
+			</div>
+
+		</p:dialog>
+		<p:dialog id="alteracaoForumDialog" header="Alteração de Fórum"
+			widgetVar="alteracaoForum" modal="true" resizable="false"
+			style="min-width: 300px" responsive="true" dynamic="true">
+
+			<div id="formAlteracaoForum" class="externoFormulario">
+				<h:form id="frmAlteracaoForum">
+					<p:messages autoUpdate="true" />
+					<h:panelGrid columns="2" styleClass="gridFormulario">
+
+						<p:outputLabel id="turmalb" value="Turma" for="turma" />
+						<h:selectOneMenu id="turma" value="#{forumBean.forum.turma}"
+							required="true" requiredMessage="Por favor selecione uma turma">
+							<f:selectItem itemLabel="Selecione" />
+							<f:selectItems value="#{turmaBean.turmas}" var="tur"
+								itemLabel="#{tur.id}" itemValue="#{tur}" />
+						</h:selectOneMenu>
+						<p:outputLabel for="txtNomeForum" value="Nome do fórum: " />
+						<p:inputText id="txtNomeForum"
+							value="#{forumBean.forumSelecionado.nome}" />
+
+						<p:outputLabel for="txtDescricaoForum"
+							value="Descrição do fórum: " />
+						<p:inputTextarea id="txtDescricaoForum"
+							value="#{forumBean.forumSelecionado.descricao}" cols="40"
+							rows="6" />
+
+						<p:commandButton value="Salvar" action="#{forumBean.alterar}"
+							update="@form" />
+						<p:button value="Fechar" onclick="PF('alteracaoForum').hide();" />
+
+					</h:panelGrid>
+				</h:form>
+			</div>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

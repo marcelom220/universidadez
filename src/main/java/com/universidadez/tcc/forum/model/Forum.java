@@ -5,12 +5,15 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -18,6 +21,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.universidadez.tcc.universidade.model.Turma;
+
+
 
 @NamedQuery(name = "Forum.listaAtivos", query = "SELECT s FROM Forum s WHERE s.ativo = true")
 @Entity
@@ -30,13 +35,12 @@ public class Forum implements Serializable {
 	
 	
 	private Long id;
-	@OneToOne
 	private Turma turma;
 	private String nome;
 	private String descricao;
 	private Date dataCatastro;
 	private boolean ativo;
-
+	
 	/**
 	 * 
 	 */
@@ -57,6 +61,7 @@ public class Forum implements Serializable {
 		this.dataCatastro = dataCatastro;
 		this.ativo = ativo;
 		this.turma = turma;
+		
 	}
 
 	/**
@@ -144,25 +149,27 @@ public class Forum implements Serializable {
 	public void setAtivo(boolean ativo) {
 		this.ativo = ativo;
 	}
+	
+	@OneToOne( optional = false, fetch = FetchType.EAGER, orphanRemoval = true)
+    @JoinColumn(name="turma_id", nullable=false)
+    @PrimaryKeyJoinColumn
+	public Turma getTurma() {
+		return turma;
+	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
+	public void setTurma(Turma turma) {
+		this.turma = turma;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((turma == null) ? 0 : turma.hashCode());
 		return result;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -177,7 +184,14 @@ public class Forum implements Serializable {
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
+		if (turma == null) {
+			if (other.turma != null)
+				return false;
+		} else if (!turma.equals(other.turma))
+			return false;
 		return true;
 	}
+
+	
 
 }

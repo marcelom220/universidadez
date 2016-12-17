@@ -9,8 +9,12 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 
+import org.apache.log4j.Logger;
+
 import com.universidadez.tcc.forum.model.Resposta;
+import com.universidadez.tcc.forum.model.Topico;
 import com.universidadez.tcc.forum.repository.RespostaRepository;
+import com.universidadez.tcc.login.model.Usuario;
 import com.universidadez.tcc.util.JpaUtil;
 
 
@@ -20,10 +24,12 @@ import com.universidadez.tcc.util.JpaUtil;
 public class RespostaBean implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
-
+	private static Logger logger = Logger.getLogger(RespostaBean.class);
 	private Resposta resposta = new Resposta();
 	private List<Resposta> respostas;
 	private Resposta respostaSelecionada;
+	private Topico topico;
+	private Usuario usuario;
 
 	/**
 	 * 
@@ -33,11 +39,14 @@ public class RespostaBean implements Serializable {
 
 	
 		public void inserir() {
+		logger.info("Entrou no método inserir.");
 		EntityManager em = JpaUtil.getEntityManager();
 		RespostaRepository rr = new RespostaRepository(em);
 		FacesContext context = FacesContext.getCurrentInstance();
 
 		try {
+			resposta.setUsuario(usuario);
+			resposta.setTopico(topico);
 			rr.insere(resposta);
 			FacesMessage mensagem = new FacesMessage("Resposta cadastrada com sucesso.");
 			mensagem.setSeverity(FacesMessage.SEVERITY_INFO);
@@ -53,20 +62,37 @@ public class RespostaBean implements Serializable {
 
 	
 		public void listaAtivas() {
+		logger.info("Entrou no método listaAtivas.");
 		EntityManager em = JpaUtil.getEntityManager();
 		RespostaRepository rr =  new RespostaRepository(em);
-		this.respostas = rr.lista();
+		this.respostas = rr.lista(topico);
+		
 	}
 
 	
 		public void alterar() {
+		logger.info("Entrou no método alterar.");
 		EntityManager em = JpaUtil.getEntityManager();
 		RespostaRepository rr =  new RespostaRepository(em);
-		rr.altera(respostaSelecionada);
+		FacesContext context = FacesContext.getCurrentInstance();
+		
+		try {
+			rr.altera(respostaSelecionada);
+			FacesMessage mensagem = new FacesMessage(
+					"Resposta " + " alterada com sucesso.");
+			mensagem.setSeverity(FacesMessage.SEVERITY_INFO);
+			context.addMessage(null, mensagem);
+		} catch (Exception e) {
+			FacesMessage mensagem = new FacesMessage("Problema ao tentar alterar a resposta.");
+			mensagem.setSeverity(FacesMessage.SEVERITY_ERROR);
+			context.addMessage(null, mensagem);
+		}
+			
 	}
 
 	
 		public void desativa() {
+		logger.info("Entrou no método desativa.");
 		EntityManager em = JpaUtil.getEntityManager();
 		RespostaRepository rr = new RespostaRepository(em);
 		FacesContext context = FacesContext.getCurrentInstance();
@@ -127,6 +153,36 @@ public class RespostaBean implements Serializable {
 	 */
 	public void setRespostaSelecionado(Resposta respostaSelecionado) {
 		this.respostaSelecionada = respostaSelecionado;
+	}
+
+
+	public Resposta getRespostaSelecionada() {
+		return respostaSelecionada;
+	}
+
+
+	public void setRespostaSelecionada(Resposta respostaSelecionada) {
+		this.respostaSelecionada = respostaSelecionada;
+	}
+
+
+	public Topico getTopico() {
+		return topico;
+	}
+
+
+	public void setTopico(Topico topico) {
+		this.topico = topico;
+	}
+
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 
 }

@@ -1,0 +1,103 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/LayoutAluno.xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:o="http://omnifaces.org/ui">
+
+
+
+ 
+	<ui:define name="content">
+		<h1 class="aw-page-title">Lista de Campus</h1>
+		<h:form id="frm2">
+		
+			<f:metadata>
+				<f:viewAction action="#{campusBean.lista}" />
+				<f:viewAction action="#{indexBean.setCampus()}" />
+			</f:metadata>
+			<c:if test="#{usuarioLogado.tipoUsuario == 'ADMINISTRADOR'}">
+			<p:messages id="messages" autoUpdate="true" closable="true" />
+
+			<p:toolbar style="margin-top: 20px">
+				<p:toolbarGroup>
+					<p:button value="Novo"
+						outcome="/campus/CampusCadastro.xhtml" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+
+			<p:dataTable id="campusTable"
+				value="#{campusBean.campusc}" var="campus"
+				emptyMessage="Nenhum campus encontrado." reflow="true"
+				style="margin-top: 10px" rows="10" paginator="true"
+				paginatorPosition="bottom">
+
+				<p:column headerText="Id" sortBy="#{campus.idCampus}">
+					<h:outputText value="#{campus.idCampus}" />
+				</p:column>
+				<p:column headerText="Nome" sortBy="#{campus.nome}">
+					<h:outputText value="#{campus.nome}" />
+				</p:column>
+				
+				<p:column headerText="Bairro" sortBy="#{campus.bairro}">
+					<h:outputText value="#{campus.bairro}" />
+				</p:column>
+				<p:column headerText="Rua" sortBy="#{campus.rua}">
+					<h:outputText value="#{campus.rua}" />
+				</p:column>
+				<p:column headerText="Numero" sortBy="#{campus.numero}">
+					<h:outputText value="#{campus.numero}" />
+				</p:column>
+				<p:column headerText="Telefone" sortBy="#{campus.telefone}">
+					<h:outputText value="#{campus.telefone}" />
+				</p:column>
+				<p:column headerText="Universidade" sortBy="#{campus.universidade}">
+					<h:outputText value="#{campus.universidade.nome}" />
+				</p:column>
+
+				<p:column>
+					<p:button title="alterar" icon="ui-icon-pencil"
+						outcome="/campus/CampusCadastro.xhtml">
+						<f:param name="campus" value="#{campus.idCampus}" />
+					</p:button>
+
+					<p:commandButton id="btnRemover" icon="ui-icon-trash"
+						oncomplete="PF('confirmacaoRemover').show()" process="@this"
+						update=":frm2">
+						<f:setPropertyActionListener value="#{campus}"
+							target="#{campusBean.campus}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+
+
+
+
+
+
+
+			<p:confirmDialog widgetVar="confirmacaoRemover"
+				header="Excluir campus" resizable="false" style="min-width: 300px"
+				responsive="true"
+				message="Tem certeza que deseja excluir o campus #{campusBean.campus.nome }?">
+				<p:messages autoUpdate="true" />
+				<div align="center">
+					<p:button value="Não"
+						onclick="PF('confirmacaoRemover').hide(); return false;" />
+					<p:commandButton value="Sim" action="#{campusBean.remover}"
+						update=":frm2" process="@this"
+						oncomplete="PF('confirmacaoRemover').hide()" />
+				</div>
+			</p:confirmDialog>
+
+
+
+
+</c:if>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

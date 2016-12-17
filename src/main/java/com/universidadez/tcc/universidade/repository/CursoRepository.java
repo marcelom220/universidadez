@@ -95,6 +95,7 @@ public class CursoRepository implements Serializable {
 		try {
 
 			et.begin();
+			curso = em.merge(curso);
 			em.remove(curso);
 			et.commit();
 			log.info("excluiu o curso.");
